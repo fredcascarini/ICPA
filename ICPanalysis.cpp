@@ -57,7 +57,7 @@ private:
 		map<string, double> m;
 		m["Cl-H"] = 2.2;
 		return m
-
+	}
 	const map<string, double> dict_of_lengths;
 		  vector<string>      list_of_types;
 	      vector<int>         list_of_trajectories;
