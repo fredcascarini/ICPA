@@ -13,58 +13,35 @@ using namespace std;
 using namespace boost;
 namespace io = boost::iostreams;
 
-class Trajectories //Handles stuff that is common amoungs all trajectories
+class SingletonTrajectories //Handles stuff that is common amoungs all trajectories
 {
 public:
-	Trajectories() {}
 	int list;
-	static map<string, double> create_map() {
+
+	map<string, double> create_map() {
 		map<string, double> m;
 		m["Cl-H"] = 2.2;
 		return m;
 	}
 
-	template <typename T>
-	static vector<T> init_list() {
-		vector<T> array1;
-		array1.reserve(10);
-		switch (decltype((t))) {
-		case int: 
-		case double: 
-		case float: 
-			array1.push_back(0);
-			break;
-		case string: 
-			array1.push_back("Init");
-			break;
-		}
-		return array1;
-	}
-
-	static vector<int> init_list_trajectories() {
-		vector<int> array2;
-		array2.push_back(0);
-		return array2;
-	}
-
-	static double find_in_lengths(string bond) {
+	double find_in_lengths(string bond) {
 		return dict_of_lengths.find(bond)->second;
 	}
 
-	static vector<string> ret_list() {
+	vector<string> ret_list() {
 		return list_of_types;
 	}
 
-	static void add_type(string type) {
+	void add_type(string type) {
 		list_of_types.push_back(type);
 	}
 
-	static int find_index(string type_to_indx) {
+	int find_index(string type_to_indx) {
 		vector<string>::iterator loc = find(list_of_types.begin(), list_of_types.end(), type_to_indx);
 		return distance(list_of_types.begin(), loc);
 	}
 
-	static bool test_bound(string bond, double length) {
+	bool test_bound(string bond, double length) {
 		double bound_length = find_in_lengths(bond);
 		return bound_length >= length;
 	}
@@ -74,12 +51,19 @@ public:
 	}
 
 private:
-	static const map<string, double> dict_of_lengths;
-	static		 vector<string>      list_of_types;
-	static       vector<int>         list_of_trajectories;
+	SingletonTrajectories() { dict_of_lengths = create_map(); }
+
+	map<string, double> create_map() {
+		map<string, double> m;
+		m["Cl-H"] = 2.2;
+		return m
+
+	const map<string, double> dict_of_lengths;
+		  vector<string>      list_of_types;
+	      vector<int>         list_of_trajectories;
 };
 
-class Trajectory : public Trajectories //handles stuff that is common to an entire line in the icp file
+class Trajectory //handles stuff that is common to an entire line in the icp file
 {
 public:
 	string return_atoms() {
