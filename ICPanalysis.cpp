@@ -18,17 +18,11 @@ class SingletonTrajectories //Handles stuff that is common amoungs all trajector
 public:
 	int list;
 
-	map<string, double> create_map() {
-		map<string, double> m;
-		m["Cl-H"] = 2.2;
-		return m;
-	}
-
-	double find_in_lengths(string bond) {
+	double find_in_lengths(string bond) const {
 		return dict_of_lengths.find(bond)->second;
 	}
 
-	vector<string> ret_list() {
+	vector<string> ret_list() const {
 		return list_of_types;
 	}
 
@@ -36,31 +30,30 @@ public:
 		list_of_types.push_back(type);
 	}
 
-	int find_index(string type_to_indx) {
+	int find_index(string type_to_indx) const {
 		vector<string>::iterator loc = find(list_of_types.begin(), list_of_types.end(), type_to_indx);
 		return distance(list_of_types.begin(), loc);
 	}
 
-	bool test_bound(string bond, double length) {
+	bool test_bound(string bond, double length) const {
 		double bound_length = find_in_lengths(bond);
 		return bound_length >= length;
 	}
 
-	int newTrajectories() {
-
-	}
 
 private:
-	SingletonTrajectories() { dict_of_lengths = create_map(); }
 
 	map<string, double> create_map() {
 		map<string, double> m;
 		m["Cl-H"] = 2.2;
-		return m
+		return m;
 	}
-	const map<string, double> dict_of_lengths;
-		  vector<string>      list_of_types;
-	      vector<int>         list_of_trajectories;
+
+	map<string, double> dict_of_lengths;
+	vector<string>      list_of_types;
+	vector<int>         list_of_trajectories;
+
+	SingletonTrajectories() { dict_of_lengths = create_map(); }
 };
 
 class Trajectory //handles stuff that is common to an entire line in the icp file
@@ -87,14 +80,14 @@ protected:
 class TrajectoryPoint : public Trajectory //handles stuff that is specific to one data point
 {
 public:
-	TrajectoryPoint(double IMcot, string IMatt);
+	TrajectoryPoint(double IMcot, string IMatt, SingletonTrajectories& ST);
 
 	double return_coordinate() {
 		return cot;
 	}
 
-	bool bound() {
-		return Trajectories::test_bound(Trajectory::att, cot);
+	bool bound(const SingletonTrajectories& ST) {
+		return ST.test_bound(Trajectory::att, cot);
 	}
 
 
@@ -103,17 +96,13 @@ protected:
 		int TrajectoryID;
 };
 
-TrajectoryPoint::TrajectoryPoint(double IMcot, string IMatt) 
+TrajectoryPoint::TrajectoryPoint(double IMcot, string IMatt, SingletonTrajectories& ST)
 {
 	cot = IMcot;
 	Trajectory::att = IMatt;
-	Trajectories::add_type(att);
-	Trajectory::index = find_index(att);
+	ST.add_type(att);
+	Trajectory::index = ST.find_index(att);
 }
-
-const map<string, double> Trajectories::dict_of_lengths = Trajectories::create_map();
-vector<string> Trajectories::list_of_types = Trajectories::init_list<string>();
-vector<int> Trajectories::list_of_trajectories = Trajectories::init_list<int>();
 
 
 int main() {
