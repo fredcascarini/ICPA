@@ -16,6 +16,12 @@ namespace io = boost::iostreams;
 class SingletonTrajectories //Handles stuff that is common amoungs all trajectories
 {
 public:
+
+	static SingletonTrajectories& Instance() {
+		static SingletonTrajectories S;
+		return S;
+	}
+
 	int list;
 
 	double find_in_lengths(string bond) const {
@@ -30,7 +36,7 @@ public:
 		list_of_types.push_back(type);
 	}
 
-	int find_index(string type_to_indx) const {
+	int find_index(string type_to_indx) {
 		vector<string>::iterator loc = find(list_of_types.begin(), list_of_types.end(), type_to_indx);
 		return distance(list_of_types.begin(), loc);
 	}
@@ -42,7 +48,7 @@ public:
 
 
 private:
-
+	SingletonTrajectories() { dict_of_lengths = create_map(); }
 	map<string, double> create_map() {
 		map<string, double> m;
 		m["Cl-H"] = 2.2;
@@ -52,8 +58,8 @@ private:
 	map<string, double> dict_of_lengths;
 	vector<string>      list_of_types;
 	vector<int>         list_of_trajectories;
+	~SingletonTrajectories() {};
 
-	SingletonTrajectories() { dict_of_lengths = create_map(); }
 };
 
 class Trajectory //handles stuff that is common to an entire line in the icp file
@@ -80,6 +86,7 @@ protected:
 class TrajectoryPoint : public Trajectory //handles stuff that is specific to one data point
 {
 public:
+
 	TrajectoryPoint(double IMcot, string IMatt, SingletonTrajectories& ST);
 
 	double return_coordinate() {
@@ -105,6 +112,8 @@ TrajectoryPoint::TrajectoryPoint(double IMcot, string IMatt, SingletonTrajectori
 }
 
 
+SingletonTrajectories& s = SingletonTrajectories::Instance();
+
 int main() {
 
 	string data("file_icp.dat");
@@ -128,7 +137,7 @@ int main() {
 		//cout << "\n----------------------" << endl; cout.flush();
 	}
 
-	TrajectoryPoint Traj(2.2, "Cl-H");
+	TrajectoryPoint Traj(2.0, "Cl-H", SingletonTrajectories::Instance() );
 
 	cout << Traj.return_index();
 
