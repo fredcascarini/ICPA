@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="\\ads.bris.ac.uk\filestore\MyFiles\StudentPG1\fc16020\Desktop\ICPanalysis\ICPanalysis.cpp">
+    <ClCompile Include="$(SolutionDir)\TestBed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestBed.cpp">
+    <ClCompile Include="$(SolutionDir)\ICPanalysis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
