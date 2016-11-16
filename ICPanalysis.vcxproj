@@ -113,7 +113,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="$(SolutionDir)\TestBed.cpp" />
-    <ClCompile Include="$(SolutionDir)\ICPanalysis.cpp" />
+    <ClCompile Include="$(SolutionDir)\ICPanalysis.cpp">
+      <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

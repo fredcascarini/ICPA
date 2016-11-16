@@ -5,13 +5,10 @@
 #include <iterator>
 #include <algorithm>
 #include <fstream>
-#include <boost\iostreams\stream.hpp>
-#include <boost\iostreams\stream_buffer.hpp>
 #include <boost\tokenizer.hpp>
 
 using namespace std;
 using namespace boost;
-namespace io = boost::iostreams;
 
 class SingletonTrajectories //Handles stuff that is common amoungs all trajectories
 {
@@ -65,6 +62,14 @@ private:
 class Trajectory //handles stuff that is common to an entire line in the icp file
 {
 public:
+
+	Trajectory(string IMatt, SingletonTrajectories& ST) 
+	{
+		att = IMatt;
+		ST.add_type(att);
+		Trajectory::index = ST.find_index(att);
+	}
+
 	string return_atoms() {
 		return att;
 	}
@@ -85,9 +90,13 @@ protected:
 
 class TrajectoryPoint : public Trajectory //handles stuff that is specific to one data point
 {
+
 public:
 
-	TrajectoryPoint(double IMcot, string IMatt, SingletonTrajectories& ST);
+	TrajectoryPoint(double IMcot)
+	{
+		cot = IMcot;
+	}
 
 	double return_coordinate() {
 		return cot;
@@ -103,16 +112,28 @@ protected:
 		int TrajectoryID;
 };
 
-TrajectoryPoint::TrajectoryPoint(double IMcot, string IMatt, SingletonTrajectories& ST)
-{
-	cot = IMcot;
-	Trajectory::att = IMatt;
-	ST.add_type(att);
-	Trajectory::index = ST.find_index(att);
+
+SingletonTrajectories& s = SingletonTrajectories::Instance();
+
+
+vector<string> StringSplit(string s, string delimiter) {
+
+	size_t pos = 0;
+
+	string token;
+	
+	vector<string> SplitString;
+
+	while ((pos = s.find(delimiter)) != string::npos) {
+		token = s.substr(0, pos);
+		SplitString.push_back(token);
+		s = s.substr(pos + delimiter.length());
+	}
+
+	return SplitString;
 }
 
 
-SingletonTrajectories& s = SingletonTrajectories::Instance();
 
 int main() {
 
@@ -131,15 +152,11 @@ int main() {
 	{
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
-		//cout << "////";
-		//for (int i = 0; i < vec.size(); i++) { cout << vec[i] << "|"; }
 
-		//cout << "\n----------------------" << endl; cout.flush();
 	}
 
-	TrajectoryPoint Traj(2.0, "Cl-H", SingletonTrajectories::Instance() );
+	TrajectoryPoint Traj(2.0);
 
-	cout << Traj.return_index();
 
     return 0;
 }
