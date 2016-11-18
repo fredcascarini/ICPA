@@ -4,6 +4,9 @@
 
 #include <string>
 
+class Trajectory;
+class SingletonTrajectories;
+
 class TrajectoryPoint//handles stuff that is specific to one data point
 {
 

@@ -1,7 +1,6 @@
 #include "Trajectory.h"
-
-class TrajectoryPoint;
-class SingletonTrajectories;
+#include "SingletonTrajectories.h"
+#include "TrajectoryPoint.h"
 
 Trajectory::Trajectory(std::string IMatt, SingletonTrajectories& ST)  //constructor
 {

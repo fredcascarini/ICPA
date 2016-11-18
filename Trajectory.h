@@ -5,6 +5,10 @@
 #include <string>
 #include <vector>
 
+class TrajectoryPoint;
+class SingletonTrajectories;
+
+
 class Trajectory //handles stuff that is common to an entire line in the icp file
 {
 public:
@@ -23,7 +27,7 @@ public:
 
 protected:
 	std::vector<double> coordinates;
-	std::vector<TrajectoryPoint&> TrajectoryPoints;
+	std::vector<TrajectoryPoint> TrajectoryPoints;
 	int index;
 	std::string att;
 	int TrajectoriesID;

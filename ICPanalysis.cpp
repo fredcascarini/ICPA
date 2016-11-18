@@ -52,13 +52,13 @@ int main() {
 	{
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
-
 	}
 
 	Trajectory Traj("Cl-H", s);
 
 	TrajectoryPoint TrajPoint(2.0, Traj);
 
+	cout << TrajPoint.return_coordinate();
 
     return 0;
 }
