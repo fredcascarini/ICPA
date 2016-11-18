@@ -21,15 +21,24 @@
     <ClCompile Include="$(SolutionDir)\ICPanalysis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SingletonTrajectories.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Trajectory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TrajectoryPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SingletonTrajectories.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Trajectories.h">
+    <ClInclude Include="TrajectoryPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TrajectoryPoint.h">
+    <ClInclude Include="Trajectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

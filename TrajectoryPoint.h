@@ -1,28 +1,19 @@
-#include <string>
+#ifndef TRAJECTORYPOINT_H
+#define TRAJECTORYPOINT_H
 
-class SingletonTrajectories;
-class Trajectory;
+
+#include <string>
 
 class TrajectoryPoint//handles stuff that is specific to one data point
 {
 
 public:
 
-	TrajectoryPoint(double IMcot, Trajectory& traj)
-	{
-		cot = IMcot;
-		att = traj.return_atoms();
-		index = traj.return_index();
-		traj.add_traj_point(*this);
-	}
+	TrajectoryPoint(double IMcot, Trajectory& traj);
 
-	double return_coordinate() {
-		return cot;
-	}
+	double return_coordinate() { return cot; }
 
-	bool bound(const SingletonTrajectories& ST, Trajectory& traj) {
-		return ST.test_bound(traj.return_atoms(), cot);
-	}
+	bool bound(const SingletonTrajectories& ST, Trajectory& traj);
 
 
 protected:
@@ -31,3 +22,5 @@ protected:
 	std::string att;
 	int index;
 };
+
+#endif
