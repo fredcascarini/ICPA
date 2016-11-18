@@ -55,17 +55,13 @@ int main() {
 		vec.assign(tok.begin(), tok.end());
 
 		Trajectory traj(vec[1], s);
-		//cout << "\n" << traj.return_TrajectoriesID() << "\n";
+		cout << "\n" << traj.return_TrajectoriesID() << "\n";
 		for (unsigned i = 2; i < vec.size(); i++) {
 			TrajectoryPoint trajp(stod(vec[i]), traj);
-			//cout << trajp.return_TrajectoryID();
+			cout << trajp.return_TrajectoryID() << "     ";
 		}
-		
+
 	}
-	Trajectory t1 = s.return_trajectory(0);
-	TrajectoryPoint tp1 = t1.return_traj_point(3);
-	double coord =  tp1.return_coordinate();
-	cout << coord;
 
     return 0;
 }

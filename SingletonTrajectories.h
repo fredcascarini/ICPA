@@ -7,7 +7,6 @@
 #include <map>
 
 class Trajectory;
-class TrajectoryPoint;
 
 class SingletonTrajectories //Handles stuff that is common amoungs all trajectories
 {
