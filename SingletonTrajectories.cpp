@@ -1,4 +1,6 @@
 #include "SingletonTrajectories.h"
+#include "Trajectory.h"
+#include "TrajectoryPoint.h"
 
 double SingletonTrajectories::find_in_lengths(std::string bond) const //returns length of bond in dict_of_lengths
 {
@@ -31,4 +33,17 @@ std::map<std::string, double> SingletonTrajectories::create_map() //Generates di
 void SingletonTrajectories::add_type(std::string type) //adds type to list_of_types
 {
 	list_of_types.push_back(type);
+}
+
+SingletonTrajectories::SingletonTrajectories() {
+	dict_of_lengths = create_map(); 
+}
+
+size_t SingletonTrajectories::add_trajectory(Trajectory& traj) {
+	list_of_trajectories.push_back(traj);
+	return list_of_trajectories.size() - 1;
+}
+
+Trajectory SingletonTrajectories::return_trajectory(int index) {
+	return list_of_trajectories[index];
 }

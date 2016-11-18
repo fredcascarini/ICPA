@@ -15,22 +15,25 @@ public:
 
 	Trajectory(std::string IMatt, SingletonTrajectories& ST);  //constructor 1
 
-	Trajectory(const Trajectory &traj, SingletonTrajectories& ST); //constructor 2
-
 
 	std::string return_atoms() { return att;} 
 
 	int return_index() { return index; }
 
-	void add_traj_point(TrajectoryPoint& TrPoint);
+	size_t add_traj_point(TrajectoryPoint& TrPoint);
 
+	TrajectoryPoint return_traj_point(int index);
+
+	size_t return_TrajectoriesID();
+
+	~Trajectory() {};
 
 protected:
 	std::vector<double> coordinates;
-	std::vector<TrajectoryPoint> TrajectoryPoints;
+	std::vector<TrajectoryPoint> list_of_trajectory_points;
 	int index;
 	std::string att;
-	int TrajectoriesID;
+	size_t TrajectoriesID;
 };
 
 #endif

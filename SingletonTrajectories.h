@@ -6,6 +6,9 @@
 #include <string>
 #include <map>
 
+class Trajectory;
+class TrajectoryPoint;
+
 class SingletonTrajectories //Handles stuff that is common amoungs all trajectories
 {
 public:
@@ -24,9 +27,13 @@ public:
 
 	bool test_bound(std::string bond, double length) const; //returns whether length is less than or equal to maximum bound length of the bond
 
+	size_t add_trajectory(Trajectory& traj); //add trajectory pointer to list_of_trajectories
+
+	Trajectory return_trajectory(int index);
+
 
 private:
-	SingletonTrajectories() { dict_of_lengths = create_map(); } //Generates singleton instance
+	SingletonTrajectories(); //Generates singleton instance
 
 	std::map<std::string, double> create_map(); //Generates dict_of_length
 
@@ -34,7 +41,7 @@ private:
 
 	std::map<std::string, double> dict_of_lengths;
 	std::vector<std::string>      list_of_types;
-	std::vector<int>         list_of_trajectories;
+	std::vector<Trajectory>       list_of_trajectories;
 
 	~SingletonTrajectories() {}; //destructor
 

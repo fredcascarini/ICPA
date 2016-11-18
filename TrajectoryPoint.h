@@ -18,10 +18,14 @@ public:
 
 	bool bound(const SingletonTrajectories& ST, Trajectory& traj);
 
+	size_t return_TrajectoryID();
+
+
+	~TrajectoryPoint() {};
 
 protected:
 	double cot;
-	int TrajectoryID;
+	size_t TrajectoryID;
 	std::string att;
 	int index;
 };

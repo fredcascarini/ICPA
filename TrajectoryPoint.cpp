@@ -14,3 +14,8 @@ TrajectoryPoint::TrajectoryPoint(double IMcot, Trajectory& traj)
 bool TrajectoryPoint::bound(const SingletonTrajectories& ST, Trajectory& traj) {
 	return ST.test_bound(traj.return_atoms(), cot);
 }
+
+size_t TrajectoryPoint::return_TrajectoryID()
+{
+	return TrajectoryID;
+}

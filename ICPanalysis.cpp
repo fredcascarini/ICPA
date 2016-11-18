@@ -9,6 +9,7 @@
 #include "SingletonTrajectories.h"
 #include "Trajectory.h"
 #include "TrajectoryPoint.h"
+#include <typeinfo>
 
 using namespace std;
 using namespace boost;
@@ -52,13 +53,19 @@ int main() {
 	{
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
+
+		Trajectory traj(vec[1], s);
+		//cout << "\n" << traj.return_TrajectoriesID() << "\n";
+		for (unsigned i = 2; i < vec.size(); i++) {
+			TrajectoryPoint trajp(stod(vec[i]), traj);
+			//cout << trajp.return_TrajectoryID();
+		}
+		
 	}
-
-	Trajectory Traj("Cl-H", s);
-
-	TrajectoryPoint TrajPoint(2.0, Traj);
-
-	cout << TrajPoint.return_coordinate();
+	Trajectory t1 = s.return_trajectory(0);
+	TrajectoryPoint tp1 = t1.return_traj_point(3);
+	double coord =  tp1.return_coordinate();
+	cout << coord;
 
     return 0;
 }
