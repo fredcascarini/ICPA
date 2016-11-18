@@ -7,7 +7,7 @@
 #include <fstream>
 #include <boost\tokenizer.hpp>
 #include "SingletonTrajectories.h"
-#include "Trajectories.h"
+#include "Trajectory.h"
 #include "TrajectoryPoint.h"
 
 using namespace std;

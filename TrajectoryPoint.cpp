@@ -1,6 +1,7 @@
-#include "SingletonTrajectories.h"
-#include "Trajectory.h"
 #include "TrajectoryPoint.h"
+
+class Trajectory;
+class SingletonTrajectories;
 
 TrajectoryPoint::TrajectoryPoint(double IMcot, Trajectory& traj)
 {

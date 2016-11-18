@@ -3,10 +3,7 @@
 
 
 #include <string>
-
-
-class SingletonTrajectories;
-class TrajectoryPoint;
+#include <vector>
 
 class Trajectory //handles stuff that is common to an entire line in the icp file
 {
