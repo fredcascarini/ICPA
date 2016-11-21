@@ -1,38 +1,32 @@
 #ifndef STRING_H
 #define STRING_H
 
-
 #include <string>
 #include <vector>
 
-class TrajectoryPoint;
 class SingletonTrajectories;
+
+class CoordSet;
+class TrajectoryPoint;
 
 
 class Trajectory //handles stuff that is common to an entire line in the icp file
 {
 public:
 
-	Trajectory(std::string IMatt, SingletonTrajectories& ST);  //constructor 1
+	Trajectory(SingletonTrajectories& ST, std::vector<std::string> data_line);  //constructor
 
+	size_t add_coord_set(CoordSet& TrPoint);
 
-	std::string return_atoms() { return att;} 
-
-	int return_index() { return index; }
-
-	size_t add_traj_point(TrajectoryPoint& TrPoint);
-
-	TrajectoryPoint return_traj_point(int index);
+	CoordSet return_coord_set(int index);
 
 	size_t return_TrajectoriesID();
 
 	~Trajectory() {};
 
-protected:
+private:
 	std::vector<double> coordinates;
-	std::vector<TrajectoryPoint> list_of_trajectory_points;
-	int index;
-	std::string att;
+	std::vector<CoordSet> list_of_coord_sets;
 	size_t TrajectoriesID;
 };
 

@@ -1,23 +1,27 @@
-#include "Trajectory.h"
 #include "SingletonTrajectories.h"
+#include "Trajectory.h"
+#include "CoordSet.h"
 #include "TrajectoryPoint.h"
 
-Trajectory::Trajectory(std::string IMatt, SingletonTrajectories& ST)  //constructor
+Trajectory::Trajectory(SingletonTrajectories& ST, std::vector<std::string> data_line)  //constructor
 {
-	att = IMatt; //Bond type
-	index = ST.find_index(att);
-	ST.add_trajectory(*this);
+	ST.add_trajectory(*this); //populate ST array of pointers
+
+	//Analysis begins:
+
+
+
 }
 
-size_t Trajectory::add_traj_point(TrajectoryPoint& TrPoint)
+size_t Trajectory::add_coord_set(CoordSet& CoSet)
 {
-	list_of_trajectory_points.push_back(TrPoint);
+	list_of_coord_sets.push_back(CoSet);
 
-	return list_of_trajectory_points.size() - 1;
+	return list_of_coord_sets.size() - 1;
 }
 
-TrajectoryPoint Trajectory::return_traj_point(int index) {
-	return list_of_trajectory_points[index];
+CoordSet Trajectory::return_coord_set(int index) {
+	return list_of_coord_sets[index];
 }
 
 size_t Trajectory::return_TrajectoriesID()

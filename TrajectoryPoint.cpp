@@ -1,21 +1,17 @@
-#include "TrajectoryPoint.h"
 #include "SingletonTrajectories.h"
 #include "Trajectory.h"
+#include "CoordSet.h"
+#include "TrajectoryPoint.h"
 
-TrajectoryPoint::TrajectoryPoint(double IMcot, Trajectory& traj)
+TrajectoryPoint::TrajectoryPoint(double IMcot, CoordSet& CS, SingletonTrajectories& ST)
 {
-	cot = IMcot;
-	att = traj.return_atoms();
-	index = traj.return_index();
-	traj.add_traj_point(*this);
+	Coordinate = IMcot;
+	index = CS.return_index();
+	CS.add_traj_point(*this);
+
+	isBound = (CS.return_type() == "length") ? bound(ST, CS) : false;
 }
 
-
-bool TrajectoryPoint::bound(const SingletonTrajectories& ST, Trajectory& traj) {
-	return ST.test_bound(traj.return_atoms(), cot);
-}
-
-size_t TrajectoryPoint::return_TrajectoryID()
-{
-	return TrajectoryID;
+bool TrajectoryPoint::bound(const SingletonTrajectories& ST, CoordSet& CS) {
+	return ST.test_bound(CS.return_atoms(), Coordinate);
 }

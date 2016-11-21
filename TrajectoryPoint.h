@@ -1,33 +1,29 @@
 #ifndef TRAJECTORYPOINT_H
 #define TRAJECTORYPOINT_H
 
-
 #include <string>
 
-class Trajectory;
 class SingletonTrajectories;
+class Trajectory;
+class CoordSet;
 
 class TrajectoryPoint//handles stuff that is specific to one data point
 {
 
 public:
 
-	TrajectoryPoint(double IMcot, Trajectory& traj);
+	TrajectoryPoint(double IMcot, CoordSet& CS, SingletonTrajectories& ST);
 
-	double return_coordinate() { return cot; }
+	double return_coordinate() { return Coordinate; }
 
-	bool bound(const SingletonTrajectories& ST, Trajectory& traj);
-
-	size_t return_TrajectoryID();
-
+	bool bound(const SingletonTrajectories& ST, CoordSet& CS);
 
 	~TrajectoryPoint() {};
 
 protected:
-	double cot;
-	size_t TrajectoryID;
-	std::string att;
+	double Coordinate;
 	int index;
+	bool isBound;
 };
 
 #endif

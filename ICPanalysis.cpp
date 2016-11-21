@@ -8,6 +8,7 @@
 #include <boost\tokenizer.hpp>
 #include "SingletonTrajectories.h"
 #include "Trajectory.h"
+#include "CoordSet.h"
 #include "TrajectoryPoint.h"
 #include <typeinfo>
 
@@ -15,7 +16,6 @@ using namespace std;
 using namespace boost;
 
 SingletonTrajectories& s = SingletonTrajectories::Instance();
-
 
 vector<string> StringSplit(string s, string delimiter) {
 
@@ -41,7 +41,11 @@ int main() {
 	string data("file_icp.dat");
 
 	ifstream input(data.c_str());
-	if (!input.is_open()) return 1;
+	if (!input.is_open()) 
+	{
+		cout << "Error in opening input file"; 
+		return 1;
+	}
 
 	char_separator<char> sep(" ");
 	typedef tokenizer< char_separator<char> > Tokenizer;
@@ -54,12 +58,12 @@ int main() {
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
 
-		Trajectory traj(vec[1], s);
-		cout << "\n" << traj.return_TrajectoriesID() << "\n";
-		for (unsigned i = 2; i < vec.size(); i++) {
-			TrajectoryPoint trajp(stod(vec[i]), traj);
-			cout << trajp.return_TrajectoryID() << "     ";
-		}
+		//Trajectory* traj = new Trajectory (vec[1], s);
+		//cout << "\n" << (*traj).return_TrajectoriesID() << "\n";
+		//for (unsigned i = 2; i < vec.size(); i++) {
+		//	TrajectoryPoint* trajp = new TrajectoryPoint(stod(vec[i]), *traj);
+		//	cout << (*trajp).return_TrajectoryID() << "     ";
+		//}
 
 	}
 

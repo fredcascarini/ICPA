@@ -1,12 +1,13 @@
 #ifndef SINGLETONTRAJECTORIES_H
 #define SINGLETONTRAJECTORIES_H
 
-
 #include <vector>
 #include <string>
 #include <map>
 
 class Trajectory;
+class CoordSet;
+class TrajectoryPoint;
 
 class SingletonTrajectories //Handles stuff that is common amoungs all trajectories
 {
@@ -28,7 +29,7 @@ public:
 
 	size_t add_trajectory(Trajectory& traj); //add trajectory pointer to list_of_trajectories
 
-	Trajectory return_trajectory(int index);
+	Trajectory return_trajectory(int index); // returns pointer at specified index
 
 
 private:

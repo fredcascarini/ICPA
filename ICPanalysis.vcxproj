@@ -119,11 +119,13 @@
     <ClCompile Include="$(SolutionDir)\ICPanalysis.cpp">
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
     </ClCompile>
+    <ClCompile Include="CoordSet.cpp" />
     <ClCompile Include="SingletonTrajectories.cpp" />
     <ClCompile Include="Trajectory.cpp" />
     <ClCompile Include="TrajectoryPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CoordSet.h" />
     <ClInclude Include="SingletonTrajectories.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
