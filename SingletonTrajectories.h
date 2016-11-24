@@ -25,6 +25,8 @@ public:
 
 	int find_index(std::string type_to_indx); //finds index of specified type in list_of_types
 
+	std::string find_type(int index) { return list_of_types[index]; } //finds type of specified index in list_of_types
+
 	bool test_bound(std::string bond, double length) const; //returns whether length is less than or equal to maximum bound length of the bond
 
 	size_t add_trajectory(Trajectory& traj); //add trajectory pointer to list_of_trajectories

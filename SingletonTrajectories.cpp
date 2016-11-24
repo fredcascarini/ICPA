@@ -10,10 +10,11 @@ double SingletonTrajectories::find_in_lengths(std::string bond) const //returns 
 
 int SingletonTrajectories::find_index(std::string type_to_indx) //finds index of specified type in list_of_types
 {
-	std::vector<std::string>::iterator loc = find(list_of_types.begin(), list_of_types.end(), type_to_indx);
+	std::vector<std::string>::iterator loc;
+	loc = find(list_of_types.begin(), list_of_types.end(), type_to_indx);
 	if (loc == list_of_types.end()) {
 		add_type(type_to_indx);
-		find_index(type_to_indx);
+		return find_index(type_to_indx);
 	}
 	return distance(list_of_types.begin(), loc);
 }

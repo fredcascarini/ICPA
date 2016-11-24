@@ -33,6 +33,9 @@
     <ClCompile Include="CoordSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LinearRegression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SingletonTrajectories.h">
@@ -45,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CoordSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearRegression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

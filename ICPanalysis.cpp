@@ -11,6 +11,7 @@
 #include "CoordSet.h"
 #include "TrajectoryPoint.h"
 #include <typeinfo>
+#include "LinearRegression.h"
 
 using namespace std;
 using namespace boost;
@@ -41,31 +42,42 @@ int main() {
 	string data("file_icp.dat");
 
 	ifstream input(data.c_str());
-	if (!input.is_open()) 
-	{
-		cout << "Error in opening input file"; 
-		return 1;
-	}
+	if (!input.is_open()) { cout << "Error in opening input file"; return 1; } 
 
 	char_separator<char> sep(" ");
 	typedef tokenizer< char_separator<char> > Tokenizer;
 
+	vector < vector <string> > vecTraj;
 	vector <string> vec;
 	string line;
+	double last_traj_no;
+	bool newTraj;
+
+	newTraj = true;
+
 
 	while (getline(input, line))
 	{
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
-
-		//Trajectory* traj = new Trajectory (vec[1], s);
-		//cout << "\n" << (*traj).return_TrajectoriesID() << "\n";
-		//for (unsigned i = 2; i < vec.size(); i++) {
-		//	TrajectoryPoint* trajp = new TrajectoryPoint(stod(vec[i]), *traj);
-		//	cout << (*trajp).return_TrajectoryID() << "     ";
-		//}
-
+		if (newTraj) {
+			vecTraj.push_back(vec);
+			last_traj_no = stod(vec[0]);
+			newTraj = false;
+			continue;
+		}
+		if (stod(vec[0]) == last_traj_no) {
+			vecTraj.push_back(vec);
+			continue;
+		}
+		Trajectory traj(s,vecTraj);
+		vecTraj.clear();
+		vecTraj.push_back(vec);
+		last_traj_no = stod(vec[0]);
 	}
+
+	
+	
 
     return 0;
 }

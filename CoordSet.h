@@ -13,7 +13,7 @@ class CoordSet {
 
 public:
 
-	CoordSet(std::string Atoms, Trajectory& T, SingletonTrajectories& ST);
+	CoordSet(std::vector<std::string> DataLine, Trajectory& T, SingletonTrajectories& ST);
 
 	std::string return_atoms() { return Atoms; }
 

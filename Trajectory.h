@@ -14,7 +14,7 @@ class Trajectory //handles stuff that is common to an entire line in the icp fil
 {
 public:
 
-	Trajectory(SingletonTrajectories& ST, std::vector<std::string> data_line);  //constructor
+	Trajectory(SingletonTrajectories& ST, std::vector< std::vector<std::string> > data_line);  //constructor
 
 	size_t add_coord_set(CoordSet& TrPoint);
 
@@ -28,6 +28,7 @@ private:
 	std::vector<double> coordinates;
 	std::vector<CoordSet> list_of_coord_sets;
 	size_t TrajectoriesID;
+	int number_of_coordinates;
 };
 
 #endif
