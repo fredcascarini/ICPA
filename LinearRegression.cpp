@@ -1,11 +1,15 @@
+#define _USE_MATH_DEFINES
 #include <vector>
 #include "boost_1_62_0\boost\accumulators\statistics\covariance.hpp"
 #include "boost_1_62_0\boost\accumulators\statistics\variates\covariate.hpp"
 #include <cmath>
 #include "LinearRegression.h"
+#include <boost/math/distributions/normal.hpp>
+
 
 using namespace std;
 using namespace boost::accumulators;
+using namespace boost::math;
 
 template <typename T> //following translated from python
 std::vector<T> GetLinearFit(const std::vector<T>& data, T r2tol, T nSegSize, T maxSegNum, double start)
@@ -116,3 +120,41 @@ std::vector<T> LinRegress(const std::vector<T>& xdata, const std::vector<T>& yda
 
 	return result;
 }
+
+
+vector<double> GausKern(double sigma, int width) 
+{
+
+	vector<double> kernel;
+	double mean = width / 2.0;
+	double sum = 0.0;
+	normal normal_function(mean, sigma);
+	for (int x = 0; x < width; ++x)
+		{
+			double x_pdf = pdf(normal_function, x);
+			kernel.push_back(x_pdf);
+			sum += x_pdf;
+		}
+
+	for (int x = 0; x < width; ++x) { kernel[x] /= sum;}
+
+	return kernel;
+}
+
+vector<double> GausBlur(vector<double> data, int width, double sigma)
+{
+	vector<double> GK =  GausKern(sigma, width);
+	vector<double> Result;
+
+	for (unsigned long i = 0; i < data.size(); ++i) {
+		double value = 0;
+		for (unsigned long ii = i - width; ii <= i + width; ++i) {
+			if (ii < 0) { continue; }
+			else { value += data[ii] * GK[ii]; }
+		}
+		Result.push_back(value);
+	}
+
+	return Result;
+}
+
