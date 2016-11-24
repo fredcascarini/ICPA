@@ -37,6 +37,7 @@ void CoordSet::CreateTrajPoints(std::vector<std::string> Data, SingletonTrajecto
 		std::vector<double> EndSlopeIntercept = GetLinearFit<double>(dData, 0.9, 10.0, 10.0, start);
 		std::vector<double> linearData(&dData[start],&dData[EndSlopeIntercept[0]]);
 		TrajectoryPoint trajP(linearData,*this,ST,EndSlopeIntercept[1],EndSlopeIntercept[2]);
+		start = EndSlopeIntercept[0];
 	}
 	return;
 }
