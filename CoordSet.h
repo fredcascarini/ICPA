@@ -24,6 +24,8 @@ public:
 
 	TrajectoryPoint return_traj_point(int index);
 
+	void CreateTrajPoints(std::vector<std::string> Data, SingletonTrajectories& ST);
+
 
 private:
 	std::string Atoms;

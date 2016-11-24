@@ -69,7 +69,7 @@ std::vector<T> GetLinearFit(const std::vector<T>& data, T r2tol, T nSegSize, T m
 	return res;
 }
 
-template <typename T> //following translated from python scipy
+template <typename T> //following translated from python's scipy library
 std::vector<T> LinRegress(const std::vector<T>& xdata, const std::vector<T>& ydata, double min, double max) {
 	accumulator_set<T, stats<tag::mean, tag::variance, tag::covariance<T, tag::covariate1> > > x_acc;
 	accumulator_set<T, stats<tag::mean, tag::variance, tag::covariance<T, tag::covariate1> > > y_acc;
