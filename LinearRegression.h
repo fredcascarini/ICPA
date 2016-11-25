@@ -3,9 +3,9 @@
 
 #include <vector>
 
-std::vector<double> GetLinearFit(const std::vector<double>& data, double r2tol, double nSegSize, double maxSegNum, double start);
+std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double nSegSize, double maxSegNum, double start);
 
-std::vector<double> LinRegress(const std::vector<double>& xdata, const std::vector<double>& ydata, double min, double max);
+std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<double>& ydata, double min, double max);
 
 std::vector<double> GausKern(double sigma, int width);
 

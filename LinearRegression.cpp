@@ -20,7 +20,7 @@
 using namespace boost::accumulators;
 
 //following translated from python
-std::vector<double> GetLinearFit(std::vector<double> &data, double r2tol, double nSegSize, double maxSegNum, double start)
+std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double nSegSize, double maxSegNum, double start)
 {
 	std::vector<double> xData;
 	std::vector<double> res;
@@ -78,7 +78,7 @@ std::vector<double> GetLinearFit(std::vector<double> &data, double r2tol, double
 }
 
 //following translated from python's scipy library
-std::vector<double> LinRegress(const std::vector<double>& xdata, const std::vector<double>& ydata, double min, double max) 
+std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<double>& ydata, double min, double max) 
 {
 	accumulator_set<double, stats<tag::mean, tag::variance, tag::covariance<double, tag::covariate1> > > x_acc;
 	accumulator_set<double, stats<tag::mean, tag::variance, tag::covariance<double, tag::covariate1> > > y_acc;

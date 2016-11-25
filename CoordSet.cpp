@@ -29,7 +29,7 @@ void CoordSet::CreateTrajPoints(std::vector<std::string> Data, SingletonTrajecto
 	double length = static_cast<double>(dData.size());
 	while (start < length) {
 		std::vector<double> EndSlopeIntercept = GetLinearFit(dData, 0.9, 10.0, 10.0, start);
-		std::vector<double> linearData(&dData[start],&dData[EndSlopeIntercept[0]]);
+		std::vector<double> linearData(dData[start],dData[EndSlopeIntercept[0]]);
 		TrajectoryPoint trajP(linearData,*this,ST,EndSlopeIntercept[1],EndSlopeIntercept[2]);
 		start = EndSlopeIntercept[0];
 	}
