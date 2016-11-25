@@ -2,6 +2,7 @@
 #include "Trajectory.h"
 #include "CoordSet.h"
 #include "TrajectoryPoint.h"
+#include "LinearRegression.h"
 
 double SingletonTrajectories::find_in_lengths(std::string bond) const //returns length of bond in dict_of_lengths
 {

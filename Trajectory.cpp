@@ -2,6 +2,7 @@
 #include "Trajectory.h"
 #include "CoordSet.h"
 #include "TrajectoryPoint.h"
+#include "LinearRegression.h"
 
 Trajectory::Trajectory(SingletonTrajectories& ST, std::vector< std::vector<std::string> > data_lines)  //constructor
 {

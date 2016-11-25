@@ -5,12 +5,13 @@
 #include <iterator>
 #include <algorithm>
 #include <fstream>
+#include <typeinfo>
 #include <boost\tokenizer.hpp>
+
 #include "SingletonTrajectories.h"
 #include "Trajectory.h"
 #include "CoordSet.h"
 #include "TrajectoryPoint.h"
-#include <typeinfo>
 #include "LinearRegression.h"
 
 using namespace std;

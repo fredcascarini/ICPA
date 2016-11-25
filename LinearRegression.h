@@ -3,11 +3,9 @@
 
 #include <vector>
 
-template <typename T>
-std::vector<T> GetLinearFit(const std::vector<T>& data, T r2tol, T nSegSize, T maxSegNum, double start);
+std::vector<double> GetLinearFit(const std::vector<double>& data, double r2tol, double nSegSize, double maxSegNum, double start);
 
-template <typename T>
-std::vector<T> LinRegress(const std::vector<T>& xdata, const std::vector<T>& ydata, double min, double max);
+std::vector<double> LinRegress(const std::vector<double>& xdata, const std::vector<double>& ydata, double min, double max);
 
 std::vector<double> GausKern(double sigma, int width);
 

@@ -2,6 +2,7 @@
 #include "Trajectory.h"
 #include "CoordSet.h"
 #include "TrajectoryPoint.h"
+#include "LinearRegression.h"
 #include <algorithm>
 
 TrajectoryPoint::TrajectoryPoint(std::vector<double> IMcot, CoordSet& CS, SingletonTrajectories& ST, double INslope, double INintercept)

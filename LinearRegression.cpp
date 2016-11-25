@@ -1,28 +1,36 @@
+#include "SingletonTrajectories.h"
+#include "Trajectory.h"
+#include "CoordSet.h"
+#include "TrajectoryPoint.h"
+#include "LinearRegression.h"
+
 #define _USE_MATH_DEFINES
+#include <cmath>
 #include <vector>
+
+#define BOOST_NUMERIC_FUNCTIONAL_STD_VECTOR_SUPPORT
+#include "boost_1_62_0\boost\accumulators\numeric\functional\vector.hpp"
+#include "boost_1_62_0\boost\accumulators\accumulators.hpp"
+#include "boost_1_62_0\boost\accumulators\statistics\stats.hpp"
+#include "boost_1_62_0\boost\accumulators\statistics\variance.hpp"
 #include "boost_1_62_0\boost\accumulators\statistics\covariance.hpp"
 #include "boost_1_62_0\boost\accumulators\statistics\variates\covariate.hpp"
-#include <cmath>
-#include "LinearRegression.h"
-#include <boost/math/distributions/normal.hpp>
+#include "boost_1_62_0\boost\math\distributions\normal.hpp"
 
-
-using namespace std;
 using namespace boost::accumulators;
-using namespace boost::math;
 
-template <typename T> //following translated from python
-std::vector<T> GetLinearFit(const std::vector<T>& data, T r2tol, T nSegSize, T maxSegNum, double start)
+//following translated from python
+std::vector<double> GetLinearFit(std::vector<double> &data, double r2tol, double nSegSize, double maxSegNum, double start)
 {
-	std::vector<T> xData;
-	std::vector<T> res;
-	std::vector<T> linRegResult;
+	std::vector<double> xData;
+	std::vector<double> res;
+	std::vector<double> linRegResult;
 
-	T slope;
-	T intercept;
-	T r2;
-	T nData = static_cast<T>(data.size());
-	long iLinEnd;
+	double slope;
+	double intercept;
+	double r2;
+	double nData = static_cast<double>(data.size());
+	double iLinEnd;
 
 	iLinEnd = 0;
 
@@ -37,24 +45,24 @@ std::vector<T> GetLinearFit(const std::vector<T>& data, T r2tol, T nSegSize, T m
 		nSegSize = nData;
 	}
 
-	T nSegNum = (maxSegNum > (nData / nSegSize)) ? (nData / nSegSize) : maxSegNum;
+	double nSegNum = (maxSegNum > (nData / nSegSize)) ? (nData / nSegSize) : maxSegNum;
 
-	for (long i = 0; i < data.size(); i++)
+	for (unsigned long i = 0; i < data.size(); i++)
 	{
-		xData.push_back(static_cast<T>(i));
+		xData.push_back(static_cast<double>(i));
 	}
 
 	for (long i = 0; i <= nSegNum; i++)
 	{
 		iLinEnd += nSegSize;
 
-		linRegResult = LinRegress(xData, yData, start, iLinEnd);
+		linRegResult = LinRegress(xData, data, start, iLinEnd);
 
 		r2 = linRegResult[2];
 
 		if (r2 * r2 <= r2tol) {
 			slope = linRegResult[0];
-			intercept = linRegResult[1]
+			intercept = linRegResult[1];
 		}
 
 		else {
@@ -62,52 +70,53 @@ std::vector<T> GetLinearFit(const std::vector<T>& data, T r2tol, T nSegSize, T m
 		}
 	}
 
-	res.push_back(iLinEnd)
+	res.push_back(iLinEnd);
 	res.push_back(slope);
 	res.push_back(intercept);
 
 	return res;
 }
 
-template <typename T> //following translated from python's scipy library
-std::vector<T> LinRegress(const std::vector<T>& xdata, const std::vector<T>& ydata, double min, double max) {
-	accumulator_set<T, stats<tag::mean, tag::variance, tag::covariance<T, tag::covariate1> > > x_acc;
-	accumulator_set<T, stats<tag::mean, tag::variance, tag::covariance<T, tag::covariate1> > > y_acc;
-	
-	std::vector<T> xvals = sub(&xdata[min], &xdata[max]);
-	std::vector<T> yvals = sub(&ydata[min], &ydata[max]);
-	std::vector<T> result;
+//following translated from python's scipy library
+std::vector<double> LinRegress(const std::vector<double>& xdata, const std::vector<double>& ydata, double min, double max) 
+{
+	accumulator_set<double, stats<tag::mean, tag::variance, tag::covariance<double, tag::covariate1> > > x_acc;
+	accumulator_set<double, stats<tag::mean, tag::variance, tag::covariance<double, tag::covariate1> > > y_acc;
 
 
-	T xmean = mean(x_acc);
-	T ymean = mean(y_acc);
+	for (unsigned long i = static_cast<unsigned long>(min); i <= static_cast<unsigned long>(max); ++i) {
+		x_acc(xdata[i], covariate1 = ydata[i]);
+		y_acc(ydata[i], covariate1 = xdata[i]);
+	}
 
-	T ssxm = variance(x_acc);
-	T ssym = variance(y_acc);
+	std::vector<double> result;
 
-	T ssxym = covariance(x_acc);
-	T ssyxm = covariance(y_acc);
+	double xmean = mean(x_acc);
+	double ymean = mean(y_acc);
 
-	T r;
-	T r_num = ssxym;
-	T r_den = sqrt(ssxm * ssym);
+	double ssxm = variance(x_acc);
+	double ssym = variance(y_acc);
 
-	T slope;
-	T intercept;
+	double ssxym = covariance(x_acc);
+	double ssyxm = covariance(y_acc);
 
-	x_acc(xvals, covariate1 = yvals);
-	y_acc(yvals, covariate1 = xvals);
+	double r;
+	double r_num = ssxym;
+	double r_den = sqrt(ssxm * ssym);
+
+	double slope;
+	double intercept;
 
 	if (r_den == 0.0) {
-		r = static_cast<T>(0.0);
+		r = static_cast<double>(0.0);
 	}
 	else {
 		r = r_num / r_den;
 		if (r > 1.0) {
-			r = static_cast<T>(1.0);
+			r = static_cast<double>(1.0);
 		}
 		else if (r < -1.0) {
-			r = static_cast<T>(-1.0);
+			r = static_cast<double>(-1.0);
 		}
 	}
 	
@@ -122,13 +131,13 @@ std::vector<T> LinRegress(const std::vector<T>& xdata, const std::vector<T>& yda
 }
 
 
-vector<double> GausKern(double sigma, int width) 
+std::vector<double> GausKern(double sigma, int width) 
 {
 
-	vector<double> kernel;
+	std::vector<double> kernel;
 	double mean = width / 2.0;
 	double sum = 0.0;
-	normal normal_function(mean, sigma);
+	boost::math::normal normal_function(mean, sigma);
 	for (int x = 0; x < width; ++x)
 		{
 			double x_pdf = pdf(normal_function, x);
@@ -141,10 +150,10 @@ vector<double> GausKern(double sigma, int width)
 	return kernel;
 }
 
-vector<double> GausBlur(vector<double> data, int width, double sigma)
+std::vector<double> GausBlur(std::vector<double> data, int width, double sigma)
 {
-	vector<double> GK =  GausKern(sigma, width);
-	vector<double> Result;
+	std::vector<double> GK =  GausKern(sigma, width);
+	std::vector<double> Result;
 
 	for (unsigned long i = 0; i < data.size(); ++i) {
 		double value = 0;
