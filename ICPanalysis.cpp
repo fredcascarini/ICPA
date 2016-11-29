@@ -56,9 +56,15 @@ int main() {
 
 	newTraj = true;
 
+	int tracker = 0;
 
 	while (getline(input, line))
 	{
+
+		if (tracker % 10 == 0) { std::cout << tracker << "\t"; }
+
+		++tracker;
+
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
 		if (newTraj) {

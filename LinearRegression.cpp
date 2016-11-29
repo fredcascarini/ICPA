@@ -3,10 +3,9 @@
 #include "CoordSet.h"
 #include "TrajectoryPoint.h"
 #include "LinearRegression.h"
-
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
+#include <iostream>
 
 #define BOOST_NUMERIC_FUNCTIONAL_STD_VECTOR_SUPPORT
 #include "boost_1_62_0\boost\accumulators\numeric\functional\vector.hpp"
@@ -20,7 +19,7 @@
 using namespace boost::accumulators;
 
 //following translated from python
-std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double nSegSize, double maxSegNum, double start)
+std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double nSegSize, double start)
 {
 	std::vector<double> xData;
 	std::vector<double> res;
@@ -31,6 +30,7 @@ std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double 
 	double r2;
 	double nData = static_cast<double>(data.size());
 	double iLinEnd;
+	double segEnd;
 
 	iLinEnd = 0;
 
@@ -45,7 +45,7 @@ std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double 
 		nSegSize = nData;
 	}
 
-	double nSegNum = (maxSegNum > (nData / nSegSize)) ? (nData / nSegSize) : maxSegNum;
+	double nSegNum = (nData / nSegSize);
 
 	for (unsigned long i = 0; i < data.size(); i++)
 	{
@@ -56,17 +56,25 @@ std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double 
 	{
 		iLinEnd += nSegSize;
 
-		linRegResult = LinRegress(xData, data, start, iLinEnd);
+		segEnd = (start + iLinEnd < data.size()) ? (start + iLinEnd) : data.size() - 1;
+
+		linRegResult = LinRegress(xData, data, start, segEnd);
 
 		r2 = linRegResult[2];
 
-		if (r2 * r2 <= r2tol) {
+		if (r2 * r2 >= r2tol) {
 			slope = linRegResult[0];
 			intercept = linRegResult[1];
 		}
 
+		else if (segEnd == data.size() - 1) {
+			break;
+		}
+
 		else {
-			iLinEnd -= nSegSize;
+			iLinEnd = (iLinEnd != nSegSize) ? (iLinEnd - nSegSize) : 1;
+			break;
+
 		}
 	}
 
@@ -85,8 +93,8 @@ std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<doub
 
 
 	for (unsigned long i = static_cast<unsigned long>(min); i <= static_cast<unsigned long>(max); ++i) {
-		x_acc(xdata[i], covariate1 = ydata[i]);
-		y_acc(ydata[i], covariate1 = xdata[i]);
+		x_acc(xdata[i-2], covariate1 = ydata[i]);
+		y_acc(ydata[i], covariate1 = xdata[i-2]);
 	}
 
 	std::vector<double> result;
@@ -97,8 +105,7 @@ std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<doub
 	double ssxm = variance(x_acc);
 	double ssym = variance(y_acc);
 
-	double ssxym = covariance(x_acc);
-	double ssyxm = covariance(y_acc);
+	double ssxym = covariance(x_acc);	
 
 	double r;
 	double r_num = ssxym;
@@ -108,15 +115,15 @@ std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<doub
 	double intercept;
 
 	if (r_den == 0.0) {
-		r = static_cast<double>(0.0);
+		r = 0.0;
 	}
 	else {
 		r = r_num / r_den;
 		if (r > 1.0) {
-			r = static_cast<double>(1.0);
+			r = 1.0;
 		}
 		else if (r < -1.0) {
-			r = static_cast<double>(-1.0);
+			r = -1.0;
 		}
 	}
 	

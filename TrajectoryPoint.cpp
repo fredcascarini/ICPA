@@ -3,16 +3,20 @@
 #include "CoordSet.h"
 #include "TrajectoryPoint.h"
 #include "LinearRegression.h"
+
 #include <algorithm>
+#include <iostream>
 
 TrajectoryPoint::TrajectoryPoint(std::vector<double> IMcot, CoordSet& CS, SingletonTrajectories& ST, double INslope, double INintercept)
 {
 	Coordinates = IMcot;
-	index = CS.return_index();
 	CS.add_traj_point(*this);
+	index = CS.return_index();
 
 	slope = INslope;
 	intercept = INintercept;
+
+	//std::cout << slope << "\t" << intercept << "\t" << Coordinates.size() << "\n";
 
 	isBound = (CS.return_type() == "length") ? bound(ST, CS) : false;
 }
