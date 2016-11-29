@@ -26,7 +26,7 @@ private:
 	std::vector<double>		coordinates;														//vector of Coordinates, each as a double
 	std::vector<CoordSet>	list_of_coord_sets;													//vector of CoordSet instances, each as a pointer
 	size_t					trajectoriesID;														//index of this Trajectory instance in SingletonTrajectories
-	int						number_of_coordinates;												//number of coordinate points in the data set
+	int						number_of_coordinates;												//number of coordinate sets in the data set
 };
 
 #endif

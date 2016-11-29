@@ -9,6 +9,7 @@
 
 CoordSet::CoordSet(std::vector<std::string> DataLine, Trajectory& T, SingletonTrajectories& ST)  //constructor for data coordinate sets
 {
+	number_of_data_points = DataLine.size() - 2.0;
 	for (unsigned i = 0; i < 3; i++) 
 	{
 		if      (i == 0) { T.add_coord_set(*this); }
@@ -17,10 +18,20 @@ CoordSet::CoordSet(std::vector<std::string> DataLine, Trajectory& T, SingletonTr
 	}
 }
 
-CoordSet::CoordSet(std::vector<TrajectoryPoint>) //constructor for traj type sets
-{}
+CoordSet::CoordSet(std::vector<CoordSet> setOfCSInstances) //constructor for traj type sets
+{
+	double size = setOfCSInstances[0].number_of_data_points;
+	for (double i = 0; i < size; ++i) {
+
+	}
+}
 
 size_t CoordSet::add_traj_point(TrajectoryPoint& TrPoint) { list_of_traj_points.push_back(TrPoint);	return list_of_traj_points.size() - 1; }
+
+std::string CoordSet::DetermineTrajType(std::vector<std::string> atom_types, std::vector<std::string> coordinates) 
+{
+	return "Unimplemented";
+}
 
 TrajectoryPoint CoordSet::return_traj_point(int index) { return list_of_traj_points[index]; }
 
@@ -30,8 +41,7 @@ void CoordSet::CreateTrajPoints(std::vector<std::string> Data, SingletonTrajecto
 	
 	for (unsigned long i = 2; i < Data.size(); ++i) { dData.push_back(std::stod(Data[i]));}
 	double start = 2;
-	double length = static_cast<double>(dData.size());
-	while (start < length) {
+	while (start < number_of_data_points) {
 		std::vector<double> EndSlopeIntercept = GetLinearFit(dData, 0.9, 1.0, start);
 
 		double end = (start + EndSlopeIntercept[0] < dData.size()) ? (start + EndSlopeIntercept[0]) : dData.size();
