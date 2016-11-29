@@ -28,5 +28,5 @@ CoordSet Trajectory::return_coord_set(int index) {
 
 size_t Trajectory::return_TrajectoriesID()
 {
-	return TrajectoriesID;
+	return trajectoriesID;
 }

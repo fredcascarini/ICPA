@@ -9,15 +9,15 @@ double SingletonTrajectories::find_in_lengths(std::string bond) const //returns 
 	return dict_of_lengths.find(bond)->second;
 }
 
-int SingletonTrajectories::find_index(std::string type_to_indx) //finds index of specified type in list_of_types
+int SingletonTrajectories::find_bond_type_index(std::string type_to_indx) //finds index of specified type in list_of_types
 {
 	std::vector<std::string>::iterator loc;
-	loc = find(list_of_types.begin(), list_of_types.end(), type_to_indx);
-	if (loc == list_of_types.end()) {
-		add_type(type_to_indx);
-		return find_index(type_to_indx);
+	loc = find(list_of_bond_types.begin(), list_of_bond_types.end(), type_to_indx);
+	if (loc == list_of_bond_types.end()) {
+		add_bond_type(type_to_indx);
+		return find_bond_type_index(type_to_indx);
 	}
-	return distance(list_of_types.begin(), loc);
+	return distance(list_of_bond_types.begin(), loc);
 }
 
 bool SingletonTrajectories::test_bound(std::string bond, double length) const //returns whether length is less than or equal to maximum bound length of the bond
@@ -33,9 +33,9 @@ std::map<std::string, double> SingletonTrajectories::create_map() //Generates di
 	return m;
 }
 
-void SingletonTrajectories::add_type(std::string type) //adds type to list_of_types
+void SingletonTrajectories::add_bond_type(std::string type) //adds type to list_of_types
 {
-	list_of_types.push_back(type);
+	list_of_bond_types.push_back(type);
 }
 
 SingletonTrajectories::SingletonTrajectories() {

@@ -7,15 +7,18 @@
 
 #include <iostream>
 
-CoordSet::CoordSet(std::vector<std::string> DataLine, Trajectory& T, SingletonTrajectories& ST)  //constructor
+CoordSet::CoordSet(std::vector<std::string> DataLine, Trajectory& T, SingletonTrajectories& ST)  //constructor for data coordinate sets
 {
 	for (unsigned i = 0; i < 3; i++) 
 	{
 		if      (i == 0) { T.add_coord_set(*this); }
-		else if (i == 1) { Atoms = DataLine[i]; index = ST.find_index(Atoms); }
+		else if (i == 1) { atoms = DataLine[i]; index = ST.find_bond_type_index(atoms); }
 		else             { CreateTrajPoints(DataLine, ST); }
 	}
 }
+
+CoordSet::CoordSet(std::vector<TrajectoryPoint>) //constructor for traj type sets
+{}
 
 size_t CoordSet::add_traj_point(TrajectoryPoint& TrPoint) { list_of_traj_points.push_back(TrPoint);	return list_of_traj_points.size() - 1; }
 

@@ -13,25 +13,30 @@ class CoordSet {
 
 public:
 
-	CoordSet(std::vector<std::string> DataLine, Trajectory& T, SingletonTrajectories& ST);
+	CoordSet(std::vector<std::string> DataLine, Trajectory& T, SingletonTrajectories& ST);		//data set constructor
+	CoordSet(std::vector<TrajectoryPoint> SetOfPoints);											//type set constructor
 
-	std::string return_atoms() { return Atoms; }
+	std::string		return_atoms()																//return atoms relevant to this CoordSet as string
+	{ return atoms; }
 
-	size_t add_traj_point(TrajectoryPoint& TrPoint);
+	int				return_index()																//return bond type index from ST as int
+	{ return index; }
 
-	int return_index() { return index; }
-	std::string return_type() { return Type; }
+	std::string		return_type()																//return coordinate type as string
+	{ return type; }
 
-	TrajectoryPoint return_traj_point(int index);
 
-	void CreateTrajPoints(std::vector<std::string> Data, SingletonTrajectories& ST);
+	size_t			add_traj_point(TrajectoryPoint& TrPoint);									//adds TrajectoryPoint instance to list_of_traj_points. Returns index of new pointer as size_t
+	TrajectoryPoint return_traj_point(int index);												//returns TrajectoryPoint instance at index in list_of_traj_points as pointer
+	void			CreateTrajPoints(std::vector<std::string> Data, SingletonTrajectories& ST);	//Separates data into a string of TrajectoryPoints
 
 
 private:
-	std::string Atoms;
-	int index;
-	std::string Type;
-	std::vector<TrajectoryPoint> list_of_traj_points;
+	std::string						atoms;														//string of atoms that co-ordinate refers to
+	int								index;														//bond type index from SingletonTrajectories
+	std::string						type;														//coordinate type: length, angle, dihedral etc.
+	std::vector<TrajectoryPoint>	list_of_traj_points;										//vector of pointers to TrajectoryPoint instances
+	std::vector<double>				set_of_traj_types;											//vector of trajectory types (e.g. Roaming, C1 complex) as numbers
 };
 
 #endif

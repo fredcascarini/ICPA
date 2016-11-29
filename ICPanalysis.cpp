@@ -61,7 +61,9 @@ int main() {
 	while (getline(input, line))
 	{
 
-		if (tracker % 10 == 0) { std::cout << tracker << "\t"; }
+		int print_on = 50;
+
+		if (tracker % print_on == 0) { std::cout << tracker/print_on << "\t"; }
 
 		++tracker;
 
