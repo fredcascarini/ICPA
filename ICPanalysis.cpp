@@ -79,7 +79,7 @@ int main() {
 			vecTraj.push_back(vec);
 			continue;
 		}
-		Trajectory traj(s,vecTraj);
+		Trajectory* traj = new Trajectory (s,vecTraj);
 		vecTraj.clear();
 		vecTraj.push_back(vec);
 		last_traj_no = stod(vec[0]);

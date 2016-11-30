@@ -32,6 +32,7 @@ CoordSet::CoordSet(std::vector<CoordSet> setOfCSInstances) //constructor for tra
 	bool min_element_change;
 
 	for (int i = 0; i < number; ++i) { //iterate over setOfCSInstances
+		std::cout << setOfCSInstances[i].return_atoms();
 		startPoints.push_back(setOfCSInstances[i].location_of_traj_points[min_element_index + 1]); //initialise startPoints with start point of SECOND section (i.e. where to read the first section up to)
 		std::cout << "Here 4";
 		currentTrajP.push_back(setOfCSInstances[i].list_of_traj_points[min_element_index]);
@@ -91,7 +92,7 @@ void CoordSet::CreateTrajPoints(std::vector<std::string> Data, SingletonTrajecto
 		double end = (start + EndSlopeIntercept[0] < dData.size()) ? (start + EndSlopeIntercept[0]) : dData.size();
 		std::vector<double>::const_iterator start_of_vec = dData.begin();
 		std::vector<double> linearData(start_of_vec + start, start_of_vec + end);
-		TrajectoryPoint trajP(linearData,*this,ST,EndSlopeIntercept[1],EndSlopeIntercept[2]);
+		TrajectoryPoint* trajP = new TrajectoryPoint (linearData,*this,ST,EndSlopeIntercept[1],EndSlopeIntercept[2]);
 		location_of_traj_points.push_back(start);
 		start = end + 1;
 	}

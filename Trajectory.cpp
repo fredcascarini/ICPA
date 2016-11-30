@@ -10,10 +10,14 @@ Trajectory::Trajectory(SingletonTrajectories& ST, std::vector< std::vector<std::
 	number_of_coordinates = data_lines.size();
 
 	//Analysis begins:
-	for (int i = 0; i < number_of_coordinates; i++) {
-		CoordSet C(data_lines[i], *this, ST);
+	for (int i = 0; i < number_of_coordinates + 1; i++) {
+		if (i != number_of_coordinates) {
+			CoordSet* C = new CoordSet (data_lines[i], *this, ST);
+		}
+		if (i == number_of_coordinates) {
+			CoordSet* C2 = new CoordSet (list_of_coord_sets);
+		}
 	}
-	CoordSet C2(list_of_coord_sets);
 }
 
 size_t Trajectory::add_coord_set(CoordSet& CoSet)
