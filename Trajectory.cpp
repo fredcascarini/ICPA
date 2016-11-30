@@ -13,6 +13,7 @@ Trajectory::Trajectory(SingletonTrajectories& ST, std::vector< std::vector<std::
 	for (int i = 0; i < number_of_coordinates; i++) {
 		CoordSet C(data_lines[i], *this, ST);
 	}
+	CoordSet C2(list_of_coord_sets);
 }
 
 size_t Trajectory::add_coord_set(CoordSet& CoSet)
