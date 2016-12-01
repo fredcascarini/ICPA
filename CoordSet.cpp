@@ -22,7 +22,7 @@ CoordSet::CoordSet(std::vector<CoordSet> setOfCSInstances) //constructor for tra
 {
 	double size = setOfCSInstances[0].number_of_data_points;
 	double number = setOfCSInstances.size();
-	std::vector<double> startPoints;
+	std::vector<int> startPoints;
 	std::vector<TrajectoryPoint> currentTrajP;
 	typedef boost::any anyType;
 
@@ -38,14 +38,62 @@ CoordSet::CoordSet(std::vector<CoordSet> setOfCSInstances) //constructor for tra
 	/* auto min_element = std::min_element(startPoints.begin(), startPoints.end());
 	double min_element_location = distance(startPoints.begin(), min_element); */
 
-	double min_element = *startPoints.begin();
+	std::vector<int> min_vals;
+	min_vals = find_min_val_loc(startPoints);
+
+	int min_element = min_vals[0];
+	int min_element_location = min_vals[1];
+
+
+
+	for (int i = 0; i < size; ++i) {
+		if (min_element_change) {
+			min_element_index++;
+			while (i == min_element) { //in case there are multiple identical min elements
+				int current_min = startPoints[min_element_location];
+				int working_min = current_min - 1;
+				int iterator = 0;
+
+				while (working_min <= current_min) {
+					working_min = setOfCSInstances[min_element_location].location_of_traj_points[iterator + 1]; //update the limit that has been reached with the new limit
+					iterator++;
+				}
+
+				startPoints[min_element_location] = working_min;
+				
+				currentTrajP[min_element_location] = setOfCSInstances[min_element_location].list_of_traj_points[iterator - 1]; //update the current trajP for the one that has been maxed
+				min_vals.clear();
+				min_vals = find_min_val_loc(startPoints);
+				min_element = min_vals[0];	min_element_location = min_vals[1];
+			}
+			min_element_change = false; //min element change has been done
+		}
+
+		if (i < min_element) {
+			std::vector<anyType> currentTimeCoSets;
+			for (int iii = 0; iii < number; ++iii) { 
+				currentTimeCoSets.push_back(setOfCSInstances[iii].return_atoms());  
+				currentTimeCoSets.push_back(currentTrajP[iii].return_coordinate()); 
+			}
+		}
+		if (i = min_element - 1) {
+			min_element_change = true;
+		}
+
+
+	}
+
+}
+
+
+inline std::vector<int> CoordSet::find_min_val_loc(std::vector<int> arr) {
+
+	int min_element = *arr.begin();
 	int min_element_location = 0;
-
-
 	int index = 0;
 
-	for (std::vector<double>::iterator it = startPoints.begin(); it != startPoints.end(); ++it) {
-		double val = *it;
+	for (std::vector<int>::iterator it = arr.begin(); it != arr.end(); ++it) {
+		int val = *it;
 		if (val < min_element) {
 			min_element = val;
 			min_element_location = index;
@@ -54,40 +102,12 @@ CoordSet::CoordSet(std::vector<CoordSet> setOfCSInstances) //constructor for tra
 		index++;
 	}
 
+	std::vector<int> results;
 
-	for (int i = 0; i < size; ++i) {
+	results.push_back(min_element);
+	results.push_back(min_element_location);
 
-		if (min_element_change){
-			std::cout << "1";
-			min_element_index++;
-
-			while (i == min_element) { //in case there are multiple identical min elements
-
-
-				startPoints[min_element_location] = setOfCSInstances[min_element_location].location_of_traj_points[min_element_index+1]; //update the limit that has been reached with the new limit
-				currentTrajP[min_element_location] = setOfCSInstances[min_element_location].list_of_traj_points[min_element_index]; //update the current trajP for the one that has been maxed
-
-				auto min_element = std::min_element(startPoints.begin(), startPoints.end()); //find the new min element
-				double min_element_location = distance(startPoints.begin(), min_element); //find the location of the new min element
-			}
-			min_element_change = false; //min element change has been done
-		}
-		if (i < min_element) {
-			std::cout << "2";
-			std::vector<anyType> currentTimeCoSets;
-			for (int iii = 0; iii < number; ++iii) { 
-				currentTimeCoSets.push_back(setOfCSInstances[iii].return_atoms());  
-				currentTimeCoSets.push_back(currentTrajP[iii].return_coordinate()); 
-			}
-		}
-		if (i = min_element - 1) {
-			std::cout << "3";
-			min_element_change = true;
-		}
-
-
-	}
-
+	return results;
 }
 
 size_t CoordSet::add_traj_point(TrajectoryPoint& TrPoint) { list_of_traj_points.push_back(TrPoint);	return list_of_traj_points.size() - 1; }

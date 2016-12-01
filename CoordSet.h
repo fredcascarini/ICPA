@@ -30,6 +30,7 @@ public:
 	TrajectoryPoint return_traj_point(int index);																	//returns TrajectoryPoint instance at index in list_of_traj_points as pointer
 	void			CreateTrajPoints(std::vector<std::string> Data, SingletonTrajectories& ST);						//Separates data into a string of TrajectoryPoints
 	std::string		DetermineTrajType(std::vector<std::string> atom_types, std::vector<std::string> coordinates);	//Determines trajectory type, returns type as string
+	inline std::vector<int> CoordSet::find_min_val_loc(std::vector<int> arr);										//finds minimum value in an array of ints, returns vector - vector[0] is min value, vector[1] is location
 
 
 private:
