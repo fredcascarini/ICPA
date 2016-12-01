@@ -55,6 +55,11 @@ CoordSet::CoordSet(std::vector<CoordSet> setOfCSInstances) //constructor for tra
 				int iterator = 0;
 
 				while (working_min <= current_min) {
+					if (iterator == setOfCSInstances[min_element_location].location_of_traj_points.size() - 1) {
+						iterator++;
+						working_min = size;
+						break;
+					}
 					working_min = setOfCSInstances[min_element_location].location_of_traj_points[iterator + 1]; //update the limit that has been reached with the new limit
 					iterator++;
 				}
