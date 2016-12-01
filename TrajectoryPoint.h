@@ -28,6 +28,7 @@ protected:
 	bool					isBound;																							//whether the coordinates is bound as boolean
 	double					slope;																								//Slope of LinReg line
 	double					intercept;																							//intercept of LinReg line
+	//~TrajectoryPoint() {};
 };
 
 #endif
