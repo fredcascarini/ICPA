@@ -162,11 +162,11 @@ std::vector<double> GausBlur(std::vector<double> data, int width, double sigma)
 	std::vector<double> GK =  GausKern(sigma, width);
 	std::vector<double> Result;
 
-	int centrePoint = std::round(width / 2);
+	int centrePoint = static_cast<int>(std::round(width / 2));
 
 	for (unsigned long i = 0; i < data.size(); ++i) {
 		double value = 0;
-		for (unsigned long ii = 0; ii <= width; ++i) {
+		for (long ii = 0; ii <= width; ++i) {
 			if (( i + ii - centrePoint ) < 0) { continue; }
 			else if (((i + ii - centrePoint) > data.size())) { continue; }
 			else { value += data[ii] * GK[ii]; }

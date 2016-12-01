@@ -15,10 +15,14 @@ public:
 
 	TrajectoryPoint(std::vector<double> IMcot, CoordSet& CS, SingletonTrajectories& ST, double INslope, double INintercept);	//constructor
 
-	std::vector<double>		return_coordinate()																					//return set of Coordinates that this TrajectoryPoint instance covers
-	{ return Coordinates; }
-
 	bool					bound(const SingletonTrajectories& ST, CoordSet& CS);												//returns whether the coordinate is bound at this period of the trajectory as boolean
+
+	double					return_slope()			{ return slope; }															//accessor functions
+	double					return_intercept()		{ return intercept; }
+	std::vector<double>		return_coordinate()		{ return Coordinates; }
+	bool					return_bound()			{ return isBound; }
+
+
 
 
 protected:
