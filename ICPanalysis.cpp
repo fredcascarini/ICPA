@@ -41,12 +41,12 @@ vector<string> StringSplit(string s, string delimiter) {
 
 int main() {
 
-	std::clock_t start;
-	start = std::clock();
+	clock_t start;
+	start = clock();
 	double duration;
 	double duration2;
 
-	duration = std::clock() / static_cast<double>(CLOCKS_PER_SEC);
+	duration = clock() / static_cast<double>(CLOCKS_PER_SEC);
 
 	string data("file_icp.dat");
 
@@ -71,8 +71,8 @@ int main() {
 		auto print_on = 50;
 
 		if (tracker % print_on == 0) { 
-			duration2 = (std::clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
-			std::cout << "\n\n" << tracker/print_on << "\t" << duration2 - duration << "\n\n"; 
+			duration2 = (clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
+			cout << "\n\n" << tracker/print_on << "\t" << duration2 - duration << "\n\n"; 
 			duration = duration2;
 		}
 
@@ -81,6 +81,7 @@ int main() {
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
 		if (newTraj) {
+			cout << "\n\n";
 			vecTraj.push_back(vec);
 			last_traj_no = stod(vec[0]);
 			newTraj = false;
@@ -96,7 +97,6 @@ int main() {
 		last_traj_no = stod(vec[0]);
 	}
 
-	
 	
 
     return 0;

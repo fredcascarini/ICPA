@@ -34,11 +34,11 @@ std::map<std::string, double> SingletonTrajectories::create_map() //Generates di
 {
 	std::map<std::string, double> m;
 	std::vector<std::string> bond;
-	m["CL_HM1"] = 2.2;
-	m["CL_HM2"] = 2.2;
-	m["CL_HM3"] = 2.2;
-	m["CL_C1"] = 100; //placeholder - CORRECT THIS
-	m["CL_C2"] = 100; //placeholder - CORRECT THIS
+	m["CL_HM1"] = 1.5;
+	m["CL_HM2"] = 1.5;
+	m["CL_HM3"] = 1.5;
+	m["CL_C1"] = 2.2; //placeholder - CORRECT THIS
+	m["CL_C2"] = 2.2; //placeholder - CORRECT THIS
 
 	return m;
 }

@@ -13,7 +13,7 @@ class SingletonTrajectories																//Handles stuff that is common amoung
 public:
 
 	static SingletonTrajectories*	Instance()											//Returns the singleton instance
-	{ static SingletonTrajectories* S; return S; }
+	{ static SingletonTrajectories S; return &S; }
 
 	std::vector<std::vector<std::string>>	ret_list() const									//returns list_of_bond_types
 	{ return list_of_bond_types; }
