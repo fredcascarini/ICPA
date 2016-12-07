@@ -52,11 +52,11 @@ SingletonTrajectories::SingletonTrajectories() {
 	dict_of_lengths = create_map(); 
 }
 
-size_t SingletonTrajectories::add_trajectory(Trajectory& traj) {
+size_t SingletonTrajectories::add_trajectory(Trajectory* traj) {
 	list_of_trajectories.push_back(traj);
 	return list_of_trajectories.size() - 1;
 }
 
-Trajectory SingletonTrajectories::return_trajectory(int index) {
+Trajectory* SingletonTrajectories::return_trajectory(int index) {
 	return list_of_trajectories[index];
 }

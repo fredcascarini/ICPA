@@ -12,32 +12,32 @@
 #include "boost_1_62_0/boost/tokenizer.hpp"
 
 
-CoordSet::CoordSet(std::vector<std::string> DataLine, Trajectory& T, SingletonTrajectories& ST)  //constructor for data coordinate sets
+CoordSet::CoordSet(std::vector<std::string> DataLine, Trajectory* T, SingletonTrajectories* ST)  //constructor for data coordinate sets
 {
 	number_of_data_points = DataLine.size() - 2;
 	atoms = SplitAtoms(DataLine[1]);
 	int num_atoms = atoms.size();
-	index = ST.find_bond_type_index(atoms);
+	index = (*ST).find_bond_type_index(atoms);
 	type = (num_atoms == 2) ? "length" : ((num_atoms == 3) ? "angle" : ((num_atoms == 4) ? "dihedral" : "error"));
 
 	CreateTrajPoints(DataLine, ST);
-	T.add_coord_set(*this);
+	(*T).add_coord_set(this);
 }
 
-CoordSet::CoordSet(std::vector<CoordSet> setOfCSInstances) //constructor for traj type sets
+CoordSet::CoordSet(std::vector<CoordSet*> setOfCSInstances) //constructor for traj type sets
 {
-	auto size = setOfCSInstances[0].number_of_data_points;
+	auto size = (*setOfCSInstances[0]).number_of_data_points;
 	int number = setOfCSInstances.size();
 	std::vector<int> startPoints;
-	std::vector<TrajectoryPoint> currentTrajP;
+	std::vector<TrajectoryPoint*> currentTrajP;
 	typedef boost::any anyType;
 
 	auto min_element_index = 0;
 	auto min_element_change = true;
 
 	for (auto i = 0; i < number; ++i) { //iterate over setOfCSInstances
-		startPoints.push_back(setOfCSInstances[i].location_of_traj_points[min_element_index + 1]); //initialise startPoints with start point of SECOND section (i.e. where to read the first section up to)
-		currentTrajP.push_back(setOfCSInstances[i].list_of_traj_points[min_element_index]);
+		startPoints.push_back((*setOfCSInstances[i]).location_of_traj_points[min_element_index + 1]); //initialise startPoints with start point of SECOND section (i.e. where to read the first section up to)
+		currentTrajP.push_back((*setOfCSInstances[i]).list_of_traj_points[min_element_index]);
 		min_element_change = false;
 	}
 
@@ -60,18 +60,18 @@ CoordSet::CoordSet(std::vector<CoordSet> setOfCSInstances) //constructor for tra
 				auto iterator = 0;
 
 				while (working_min <= current_min) { //finds the next minimum value
-					if (iterator == setOfCSInstances[min_element_location].location_of_traj_points.size() - 1) { //if it has reached the end of the list of minimums, sets the next minimum as the end of the data
+					if (iterator == (*setOfCSInstances[min_element_location]).location_of_traj_points.size() - 1) { //if it has reached the end of the list of minimums, sets the next minimum as the end of the data
 						iterator++;
 						working_min = size;
 						break;
 					}
-					working_min = setOfCSInstances[min_element_location].location_of_traj_points[iterator + 1]; //update the limit that has been reached with the next limit
+					working_min = (*setOfCSInstances[min_element_location]).location_of_traj_points[iterator + 1]; //update the limit that has been reached with the next limit
 					iterator++; //steps up iterator - this needs to be undone if the while loop ends
 				}
 
 				startPoints[min_element_location] = working_min; //updates the startPoints vector with the found minimum
 				
-				currentTrajP[min_element_location] = setOfCSInstances[min_element_location].list_of_traj_points[iterator - 1]; //update the current trajP for the one that has been maxed
+				currentTrajP[min_element_location] = (*setOfCSInstances[min_element_location]).list_of_traj_points[iterator - 1]; //update the current trajP for the one that has been maxed
 				min_vals.clear(); //clears previous assignment from find_min_val_loc
 				min_vals = find_min_val_loc(startPoints);
 				min_element = min_vals[0];	min_element_location = min_vals[1]; //saves new values
@@ -82,11 +82,11 @@ CoordSet::CoordSet(std::vector<CoordSet> setOfCSInstances) //constructor for tra
 		if (i < min_element) {
 			std::vector<anyType> currentTimeCoSets;
 			for (auto iii = 0; iii < number; ++iii) { 
-				currentTimeCoSets.push_back(setOfCSInstances[iii].return_atoms());  
-				currentTimeCoSets.push_back(currentTrajP[iii].return_coordinate());
-				currentTimeCoSets.push_back(currentTrajP[iii].return_intercept());
-				currentTimeCoSets.push_back(currentTrajP[iii].return_slope());
-				currentTimeCoSets.push_back(currentTrajP[iii].return_bound());
+				currentTimeCoSets.push_back((*setOfCSInstances[iii]).return_atoms());  
+				currentTimeCoSets.push_back((*currentTrajP[iii]).return_coordinate());
+				currentTimeCoSets.push_back((*currentTrajP[iii]).return_intercept());
+				currentTimeCoSets.push_back((*currentTrajP[iii]).return_slope());
+				currentTimeCoSets.push_back((*currentTrajP[iii]).return_bound());
 				auto type = DetermineTrajType(currentTimeCoSets);
 			}
 		}
@@ -136,7 +136,7 @@ inline std::vector<int> CoordSet::find_min_val_loc(std::vector<int> arr) {
 	return results;
 }
 
-size_t CoordSet::add_traj_point(TrajectoryPoint& TrPoint) { list_of_traj_points.push_back(TrPoint);	return list_of_traj_points.size() - 1; }
+size_t CoordSet::add_traj_point(TrajectoryPoint* TrPoint) { list_of_traj_points.push_back(TrPoint);	return list_of_traj_points.size() - 1; }
 
 std::string CoordSet::DetermineTrajType(std::vector<boost::any> traj_details) const
 {
@@ -172,9 +172,9 @@ std::string CoordSet::DetermineTrajType(std::vector<boost::any> traj_details) co
 	return "Unfinished";
 }
 
-TrajectoryPoint CoordSet::return_traj_point(int index) { return list_of_traj_points[index]; }
+TrajectoryPoint* CoordSet::return_traj_point(int index) { return list_of_traj_points[index]; }
 
-void CoordSet::CreateTrajPoints(std::vector<std::string> Data, SingletonTrajectories& ST) {
+void CoordSet::CreateTrajPoints(std::vector<std::string> Data, SingletonTrajectories* ST) {
 	
 	std::vector<double> dData;
 	
@@ -186,7 +186,7 @@ void CoordSet::CreateTrajPoints(std::vector<std::string> Data, SingletonTrajecto
 		auto end = (start + ESIend < dData.size()) ? (start + ESIend) : dData.size();
 		std::vector<double>::const_iterator start_of_vec = dData.begin();
 		std::vector<double> linearData(start_of_vec + start, start_of_vec + end);
-		auto trajP = new TrajectoryPoint (linearData,*this,ST,EndSlopeIntercept[1],EndSlopeIntercept[2]);
+		auto trajP = new TrajectoryPoint (linearData,this,ST,EndSlopeIntercept[1],EndSlopeIntercept[2]);
 		location_of_traj_points.push_back(start);
 		start = end + 1;
 	}

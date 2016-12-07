@@ -12,9 +12,9 @@ class TrajectoryPoint//handles stuff that is specific to one data point
 
 public:
 
-	TrajectoryPoint(std::vector<double> IMcot, CoordSet& CS, SingletonTrajectories& ST, double INslope, double INintercept);	//constructor
+	TrajectoryPoint(std::vector<double> IMcot, CoordSet* CS, SingletonTrajectories* ST, double INslope, double INintercept);	//constructor
 
-	bool					bound(const SingletonTrajectories& ST, CoordSet& CS);												//returns whether the coordinate is bound at this period of the trajectory as boolean
+	bool					bound(const SingletonTrajectories* ST, CoordSet* CS);												//returns whether the coordinate is bound at this period of the trajectory as boolean
 
 	double					return_slope() const { return slope; }															//accessor functions
 	double					return_intercept() const { return intercept; }

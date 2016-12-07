@@ -19,7 +19,7 @@
 using namespace std;
 using namespace boost;
 
-SingletonTrajectories& s = SingletonTrajectories::Instance();
+SingletonTrajectories* s = SingletonTrajectories::Instance();
 
 vector<string> StringSplit(string s, string delimiter) {
 
