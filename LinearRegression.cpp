@@ -1,20 +1,15 @@
-#include "SingletonTrajectories.h"
-#include "Trajectory.h"
-#include "CoordSet.h"
-#include "TrajectoryPoint.h"
 #include "LinearRegression.h"
 #include <cmath>
 #include <vector>
-#include <iostream>
 
 #define BOOST_NUMERIC_FUNCTIONAL_STD_VECTOR_SUPPORT
-#include "boost_1_62_0\boost\accumulators\numeric\functional\vector.hpp"
-#include "boost_1_62_0\boost\accumulators\accumulators.hpp"
-#include "boost_1_62_0\boost\accumulators\statistics\stats.hpp"
-#include "boost_1_62_0\boost\accumulators\statistics\variance.hpp"
-#include "boost_1_62_0\boost\accumulators\statistics\covariance.hpp"
-#include "boost_1_62_0\boost\accumulators\statistics\variates\covariate.hpp"
-#include "boost_1_62_0\boost\math\distributions\normal.hpp"
+#include <boost/accumulators/numeric/functional/vector.hpp>
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/variance.hpp>
+#include <boost/accumulators/statistics/covariance.hpp>
+#include <boost/accumulators/statistics/variates/covariate.hpp>
+#include <boost/math/distributions/normal.hpp>
 
 using namespace boost::accumulators;
 
@@ -28,7 +23,7 @@ std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double 
 	double slope;
 	double intercept;
 	double r2;
-	double nData = static_cast<double>(data.size());
+	auto nData = static_cast<double>(data.size());
 	double iLinEnd;
 	double segEnd;
 
@@ -45,7 +40,7 @@ std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double 
 		nSegSize = nData;
 	}
 
-	double nSegNum = (nData / nSegSize);
+	auto nSegNum = (nData / nSegSize);
 
 	for (unsigned long i = 0; i < data.size(); i++)
 	{
@@ -92,24 +87,24 @@ std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<doub
 	accumulator_set<double, stats<tag::mean, tag::variance, tag::covariance<double, tag::covariate1> > > y_acc;
 
 
-	for (unsigned long i = static_cast<unsigned long>(min); i <= static_cast<unsigned long>(max); ++i) {
+	for (auto i = static_cast<unsigned long>(min); i <= static_cast<unsigned long>(max); ++i) {
 		x_acc(xdata[i-2], covariate1 = ydata[i]);
 		y_acc(ydata[i], covariate1 = xdata[i-2]);
 	}
 
 	std::vector<double> result;
 
-	double xmean = mean(x_acc);
-	double ymean = mean(y_acc);
+	auto xmean = mean(x_acc);
+	auto ymean = mean(y_acc);
 
-	double ssxm = variance(x_acc);
-	double ssym = variance(y_acc);
+	auto ssxm = variance(x_acc);
+	auto ssym = variance(y_acc);
 
-	double ssxym = covariance(x_acc);	
+	auto ssxym = covariance(x_acc);	
 
 	double r;
-	double r_num = ssxym;
-	double r_den = sqrt(ssxm * ssym);
+	auto r_num = ssxym;
+	auto r_den = sqrt(ssxm * ssym);
 
 	double slope;
 	double intercept;
@@ -142,27 +137,27 @@ std::vector<double> GausKern(double sigma, int width)
 {
 
 	std::vector<double> kernel;
-	double mean = width / 2.0;
-	double sum = 0.0;
+	auto mean = width / 2.0;
+	auto sum = 0.0;
 	boost::math::normal normal_function(mean, sigma);
-	for (int x = 0; x < width; ++x)
+	for (auto x = 0; x < width; ++x)
 		{
-			double x_pdf = pdf(normal_function, x);
+			auto x_pdf = pdf(normal_function, x);
 			kernel.push_back(x_pdf);
 			sum += x_pdf;
 		}
 
-	for (int x = 0; x < width; ++x) { kernel[x] /= sum;}
+	for (auto x = 0; x < width; ++x) { kernel[x] /= sum;}
 
 	return kernel;
 }
 
 std::vector<double> GausBlur(std::vector<double> data, int width, double sigma)
 {
-	std::vector<double> GK =  GausKern(sigma, width);
+	auto GK =  GausKern(sigma, width);
 	std::vector<double> Result;
 
-	int centrePoint = static_cast<int>(std::round(width / 2));
+	auto centrePoint = static_cast<int>(std::round(width / 2));
 
 	for (unsigned long i = 0; i < data.size(); ++i) {
 		double value = 0;

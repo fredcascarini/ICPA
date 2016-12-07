@@ -1,7 +1,6 @@
 #ifndef TRAJECTORYPOINT_H
 #define TRAJECTORYPOINT_H
 
-#include <string>
 #include <vector>
 
 class SingletonTrajectories;
@@ -17,10 +16,10 @@ public:
 
 	bool					bound(const SingletonTrajectories& ST, CoordSet& CS);												//returns whether the coordinate is bound at this period of the trajectory as boolean
 
-	double					return_slope()			{ return slope; }															//accessor functions
-	double					return_intercept()		{ return intercept; }
-	std::vector<double>		return_coordinate()		{ return Coordinates; }
-	bool					return_bound()			{ return isBound; }
+	double					return_slope() const { return slope; }															//accessor functions
+	double					return_intercept() const { return intercept; }
+	std::vector<double>		return_coordinate() const { return Coordinates; }
+	bool					return_bound() const { return isBound; }
 
 
 

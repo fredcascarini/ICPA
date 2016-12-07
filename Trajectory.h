@@ -18,7 +18,7 @@ public:
 	
 	size_t					add_coord_set(CoordSet& CoSet);										//add pointer to CoordSet to list_of_coord_sets, returns index of ppinter as size_t
 	CoordSet				return_coord_set(int index);										//returns CoordSet instance at location index in list_of_coord_sets as pointer
-	size_t					return_TrajectoriesID();											//returns index of this Trajectory instance in SingletonTrajectories
+	size_t					return_TrajectoriesID() const;											//returns index of this Trajectory instance in SingletonTrajectories
 
 private:
 

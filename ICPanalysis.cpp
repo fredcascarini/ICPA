@@ -6,7 +6,9 @@
 #include <algorithm>
 #include <fstream>
 #include <typeinfo>
-#include <boost\tokenizer.hpp>
+#include <boost/tokenizer.hpp>
+
+#include <ctime>
 
 #include "SingletonTrajectories.h"
 #include "Trajectory.h"
@@ -37,8 +39,14 @@ vector<string> StringSplit(string s, string delimiter) {
 }
 
 
-
 int main() {
+
+	std::clock_t start;
+	start = std::clock();
+	double duration;
+	double duration2;
+
+	duration = std::clock() / static_cast<double>(CLOCKS_PER_SEC);
 
 	string data("file_icp.dat");
 
@@ -56,14 +64,17 @@ int main() {
 
 	newTraj = true;
 
-	int tracker = 0;
+	auto tracker = 0;
 
 	while (getline(input, line))
 	{
+		auto print_on = 50;
 
-		int print_on = 50;
-
-		if (tracker % print_on == 0) { std::cout << tracker/print_on << "\t"; }
+		if (tracker % print_on == 0) { 
+			duration2 = (std::clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
+			std::cout << "\n\n" << tracker/print_on << "\t" << duration2 - duration << "\n\n"; 
+			duration = duration2;
+		}
 
 		++tracker;
 
@@ -79,7 +90,7 @@ int main() {
 			vecTraj.push_back(vec);
 			continue;
 		}
-		Trajectory* traj = new Trajectory (s,vecTraj);
+		auto traj = new Trajectory (s,vecTraj);
 		vecTraj.clear();
 		vecTraj.push_back(vec);
 		last_traj_no = stod(vec[0]);
