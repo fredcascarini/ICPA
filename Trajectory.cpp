@@ -16,7 +16,7 @@ Trajectory::Trajectory(SingletonTrajectories* ST, std::vector< std::vector<std::
 		}
 	}
 
-	(*ST).add_trajectory(this); //populate ST array of pointers
+	ST->add_trajectory(this); //populate ST array of pointers
 }
 
 size_t Trajectory::add_coord_set(CoordSet* CoSet)
