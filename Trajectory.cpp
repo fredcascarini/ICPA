@@ -1,36 +1,43 @@
-#include "set_of_trajectories.h"
-#include "trajectory.h"
-#include "coord_set.h"
+#include "SingletonTrajectories.h"
+#include "Trajectory.h"
+#include "CoordSet.h"
 
-trajectory::trajectory(set_of_trajectories* ST, std::vector< std::vector<std::string> > data_lines)  //constructor
+using namespace std;
+
+Trajectory::Trajectory(SingletonTrajectories* ST, vector< vector<string> > data_lines)  //constructor
+	: st_(ST), data_lines_(data_lines)
 {
-	number_of_coordinates = data_lines.size();
+	number_of_coordinates = data_lines_.size();
+}
 
+Trajectory::~Trajectory()  
+{
+	for (CoordSet* value_ : list_of_coord_sets) {
+		delete value_;
+	}
+}
+
+void Trajectory::analyse()
+{
 	//Analysis begins:
-	for (auto i = 0; i < number_of_coordinates + 1; i++) {
-		if (i != number_of_coordinates) {
-			auto c = new coord_set (data_lines[i], this, ST);
-		}
-		if (i == number_of_coordinates) {
-			auto c2 = new coord_set (list_of_coord_sets);
-		}
+	for (auto i = 0; i < number_of_coordinates; i++) {
+		auto C = new CoordSet(data_lines_[i], st_);
+		C->analyse();
+		add_coord_set(C);
 	}
 
-	ST->add_trajectory(this); //populate ST array of pointers
+	// todo C2 is not a CordSet
+	auto C2 = new CoordSet(list_of_coord_sets);
+
+	st_->add_trajectory(this); //populate ST array of pointers	
 }
 
-size_t trajectory::add_coord_set(coord_set* CoSet)
+void Trajectory::add_coord_set(CoordSet* CoSet)
 {
 	list_of_coord_sets.push_back(CoSet);
-
-	return list_of_coord_sets.size() - 1;
 }
 
-coord_set* trajectory::return_coord_set(int index) {
+CoordSet* Trajectory::return_coord_set(int index) {
 	return list_of_coord_sets[index];
 }
 
-size_t trajectory::return_TrajectoriesID() const
-{
-	return trajectoriesID;
-}

@@ -3,35 +3,39 @@
 #include <vector>
 #include <iostream>
 #include <iterator>
+#include <algorithm>
 #include <fstream>
+#include <typeinfo>
 #include <boost/tokenizer.hpp>
 
 #include <ctime>
 
-#include "set_of_trajectories.h"
-#include "trajectory.h"
+#include "SingletonTrajectories.h"
+#include "Trajectory.h"
 #include "CoordSet.h"
+#include "TrajectoryPoint.h"
+#include "LinearRegression.h"
 
 using namespace std;
 using namespace boost;
 
-set_of_trajectories* s = set_of_trajectories::instance();
+SingletonTrajectories* s = SingletonTrajectories::Instance();
 
 vector<string> StringSplit(string s, string delimiter) {
 
-	size_t pos;
+	size_t pos = 0;
 
 	string token;
 	
-	vector<string> split_string;
+	vector<string> SplitString;
 
 	while ((pos = s.find(delimiter)) != string::npos) {
 		token = s.substr(0, pos);
-		split_string.push_back(token);
+		SplitString.push_back(token);
 		s = s.substr(pos + delimiter.length());
 	}
 
-	return split_string;
+	return SplitString;
 }
 
 
@@ -52,13 +56,13 @@ int main() {
 	char_separator<char> sep(" ");
 	typedef tokenizer< char_separator<char> > Tokenizer;
 
-	vector < vector <string> > vec_traj;
+	vector < vector <string> > vecTraj;
 	vector <string> vec;
 	string line;
 	double last_traj_no;
-	bool new_traj;
+	bool newTraj;
 
-	new_traj = true;
+	newTraj = true;
 
 	auto tracker = 0;
 
@@ -76,27 +80,25 @@ int main() {
 
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
-		if (new_traj) {
+		if (newTraj) {
 			cout << "\n\n";
-			vec_traj.push_back(vec);
+			vecTraj.push_back(vec);
 			last_traj_no = stod(vec[0]);
-			new_traj = false;
+			newTraj = false;
 			continue;
 		}
 		if (stod(vec[0]) == last_traj_no) {
-			vec_traj.push_back(vec);
+			vecTraj.push_back(vec);
 			continue;
 		}
-		auto traj = new trajectory (s,vec_traj);
-		vec_traj.clear();
-		vec_traj.push_back(vec);
+		auto traj = Trajectory (s,vecTraj);
+		traj.analyse();
+		vecTraj.clear();
+		vecTraj.push_back(vec);
 		last_traj_no = stod(vec[0]);
 	}
 
-
 	cout << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
-
-	
 
     return 0;
 }

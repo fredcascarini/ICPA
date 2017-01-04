@@ -4,29 +4,29 @@
 #include <string>
 #include <vector>
 
-class set_of_trajectories;
+class SingletonTrajectories;
 
-class coord_set;
-class trajectory_point;
+class CoordSet;
+class TrajectoryPoint;
 
 
-class trajectory //handles stuff that is common to an entire line in the icp file
+class Trajectory //handles stuff that is common to an entire line in the icp file
 {
 public:
 
-	trajectory(set_of_trajectories* ST, std::vector< std::vector<std::string> > data_line);	//constructor
-	
-	size_t					add_coord_set(coord_set* CoSet);										//add pointer to coord_set to list_of_coord_sets, returns index of ppinter as size_t
-	coord_set*				return_coord_set(int index);										//returns coord_set instance at location index in list_of_coord_sets as pointer
-	size_t					return_TrajectoriesID() const;											//returns index of this trajectory instance in set_of_trajectories
+	Trajectory(SingletonTrajectories* ST, std::vector< std::vector<std::string> > data_line);	//constructor
+	~Trajectory();
+	void analyse();
+
+	void					add_coord_set(CoordSet* CoSet);										//add pointer to CoordSet to list_of_coord_sets, returns index of ppinter as size_t
+	CoordSet*				return_coord_set(int index);										//returns CoordSet instance at location index in list_of_coord_sets as pointer
 
 private:
 
-	std::vector<double>		coordinates;														//vector of Coordinates, each as a double
-	std::vector<coord_set*>	list_of_coord_sets;													//vector of coord_set instances, each as a pointer
-	size_t					trajectoriesID;														//index of this trajectory instance in set_of_trajectories
+	std::vector<CoordSet*>	list_of_coord_sets;													//vector of CoordSet instances, each as a pointer
 	int						number_of_coordinates;												//number of coordinate sets in the data set
-	//~trajectory() {};																			//destructor
+	SingletonTrajectories* st_;
+	std::vector<std::vector<std::string>> data_lines_;
 
 };
 
