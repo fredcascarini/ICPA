@@ -13,11 +13,9 @@ TrajectoryPoint::TrajectoryPoint(std::vector<double> IMcot, CoordSet* CS, Single
 	slope = INslope;
 	intercept = INintercept;
 	
-	isBound = (CS->return_type() == "length") ? bound(ST, CS) : false;
-
-	CS->add_traj_point(this);
+	isBound = (CS->return_type() == dataType::length) ? bound(ST, CS) : false;
 }
 
 bool TrajectoryPoint::bound(const SingletonTrajectories* ST, CoordSet* CS) {
-	return ST->test_bound(CS->return_atoms(), *std::max_element(Coordinates.begin(), Coordinates.end()) );
+	return ST->test_bound(CS->return_name(), *std::max_element(Coordinates.begin(), Coordinates.end()) );
 }

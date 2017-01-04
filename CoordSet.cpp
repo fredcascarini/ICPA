@@ -13,16 +13,40 @@
 
 using namespace std;
 
-CoordSet::CoordSet(vector<string> DataLine, Trajectory* T, SingletonTrajectories* ST)  //constructor for data coordinate sets
-{
-	number_of_data_points = DataLine.size() - 2;
-	atoms = SplitAtoms(DataLine[1]);
+CoordSet::CoordSet(vector<string> dataLine, SingletonTrajectories* ST)  //constructor for data coordinate sets
+	: data_line_(dataLine), st_(ST) {
+	number_of_data_points = dataLine.size() - num_header_cols;
+	name = dataLine[1];
+	atoms = SplitAtoms(name);
 	index = ST->find_bond_type_index(atoms);
 	int num_atoms = atoms.size();
-	type = (atoms.size() == 2) ? "length" : ((atoms.size() == 3) ? "angle" : ((num_atoms == 4) ? "dihedral" : "error"));
 
-	CreateTrajPoints(DataLine, ST);
-	T->add_coord_set(this);
+	switch (num_atoms) {
+	case (2):
+		{
+			type = dataType::length;
+			break;
+		}
+	case (3):
+		{
+			type = dataType::angle;
+			break;
+		}
+	case (4):
+		{
+			type = dataType::dihedral;
+			break;
+		}
+	default:
+		{
+			type = dataType::error;
+			break;
+		}
+	}
+}
+
+void CoordSet::analyse() {
+	CreateTrajPoints(data_line_, st_);
 }
 
 CoordSet::CoordSet(vector<CoordSet*> setOfCSInstances) //constructor for traj type sets
@@ -39,7 +63,12 @@ CoordSet::CoordSet(vector<CoordSet*> setOfCSInstances) //constructor for traj ty
 	vector<string> type_set;
 
 	for (auto i = 0; i < number; ++i) { //iterate over setOfCSInstances
-		startPoints.push_back(setOfCSInstances[i]->location_of_traj_points[min_element_index + 1]); //initialise startPoints with start point of SECOND section (i.e. where to read the first section up to)
+		if (setOfCSInstances[i]->location_of_traj_points.size() != 1 ) {
+			startPoints.push_back(setOfCSInstances[i]->location_of_traj_points[min_element_index + 1]); //initialise startPoints with start point of SECOND section (i.e. where to read the first section up to)
+		}
+		else {
+			startPoints.push_back(size);
+		}
 		currentTrajP.push_back(setOfCSInstances[i]->list_of_traj_points[min_element_index]);
 		min_element_change = false;
 	}
@@ -181,15 +210,19 @@ void CoordSet::CreateTrajPoints(vector<string> Data, SingletonTrajectories* ST) 
 	
 	vector<double> dData;
 	
-	for (unsigned long i = 2; i < Data.size(); ++i) { dData.push_back(stod(Data[i]));}
-	auto start = 2;
+	for (unsigned long i = num_header_cols; i < Data.size(); ++i) {
+		dData.push_back(stod(Data[i]));
+	}
+	auto start = num_header_cols;
 	while (start < number_of_data_points) {
+
 		auto EndSlopeIntercept = GetLinearFit(dData, 0.9, 1.0, start);
 		unsigned int ESIend = static_cast<int>(round(EndSlopeIntercept[0]));
 		auto end = (start + ESIend < dData.size()) ? (start + ESIend) : dData.size();
 		vector<double>::const_iterator start_of_vec = dData.begin();
 		vector<double> linearData(start_of_vec + start, start_of_vec + end);
 		auto trajP = new TrajectoryPoint (linearData,this,ST,EndSlopeIntercept[1],EndSlopeIntercept[2]);
+		add_traj_point(trajP);
 		location_of_traj_points.push_back(start);
 		start = end + 1;
 	}

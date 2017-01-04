@@ -91,16 +91,14 @@ int main() {
 			vecTraj.push_back(vec);
 			continue;
 		}
-		auto traj = new Trajectory (s,vecTraj);
+		auto traj = Trajectory (s,vecTraj);
+		traj.analyse();
 		vecTraj.clear();
 		vecTraj.push_back(vec);
 		last_traj_no = stod(vec[0]);
 	}
 
-
 	cout << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
-
-	
 
     return 0;
 }

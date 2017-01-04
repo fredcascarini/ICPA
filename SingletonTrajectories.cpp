@@ -19,21 +19,15 @@ int SingletonTrajectories::find_bond_type_index(std::vector<std::string> type_to
 	return distance(list_of_bond_types.begin(), loc);
 }
 
-bool SingletonTrajectories::test_bound(std::vector<std::string> bond, double length) const //returns whether length is less than or equal to maximum bound length of the bond
-{
-	auto bond_as_string = bond[0];
-	for (auto i = 1; i != bond.size(); ++i) {
-		bond_as_string = bond_as_string + "_" + bond[i];
-	}
+bool SingletonTrajectories::test_bound(std::string bond_as_string, double length) const //returns whether length is less than or equal to maximum bound length of the bond
+{	
 	auto bound_length = find_in_lengths(bond_as_string);
-
-	return bound_length >= std::abs(length);
+	return bound_length >= abs(length);
 }
 
 std::map<std::string, double> SingletonTrajectories::create_map() //Generates dict_of_length
 {
 	std::map<std::string, double> m;
-	std::vector<std::string> bond;
 	m["CL_HM1"] = 1.5;
 	m["CL_HM2"] = 1.5;
 	m["CL_HM3"] = 1.5;
