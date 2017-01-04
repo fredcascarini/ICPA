@@ -1,14 +1,14 @@
-#include "SingletonTrajectories.h"
-#include "Trajectory.h"
+#include "set_of_trajectories.h"
+#include "trajectory.h"
 
 #include <iostream>
 
-double SingletonTrajectories::find_in_lengths(std::string bond) const //returns length of bond in dict_of_lengths
+double set_of_trajectories::find_in_lengths(std::string bond) const //returns length of bond in dict_of_lengths
 {	
 	return dict_of_lengths.find(bond)->second;
 }
 
-int SingletonTrajectories::find_bond_type_index(std::vector<std::string> type_to_indx) //finds index of specified type in list_of_types
+int set_of_trajectories::find_bond_type_index(std::vector<std::string> type_to_indx) //finds index of specified type in list_of_types
 {
 	std::vector<std::vector<std::string>>::iterator loc;
 	loc = find(list_of_bond_types.begin(), list_of_bond_types.end(), type_to_indx);
@@ -19,7 +19,7 @@ int SingletonTrajectories::find_bond_type_index(std::vector<std::string> type_to
 	return distance(list_of_bond_types.begin(), loc);
 }
 
-bool SingletonTrajectories::test_bound(std::vector<std::string> bond, double length) const //returns whether length is less than or equal to maximum bound length of the bond
+bool set_of_trajectories::test_bound(std::vector<std::string> bond, double length) const //returns whether length is less than or equal to maximum bound length of the bond
 {
 	auto bond_as_string = bond[0];
 	for (auto i = 1; i != bond.size(); ++i) {
@@ -27,10 +27,10 @@ bool SingletonTrajectories::test_bound(std::vector<std::string> bond, double len
 	}
 	auto bound_length = find_in_lengths(bond_as_string);
 
-	return bound_length >= std::abs(length);
+	return bound_length >= abs(length);
 }
 
-std::map<std::string, double> SingletonTrajectories::create_map() //Generates dict_of_length
+std::map<std::string, double> set_of_trajectories::create_map() //Generates dict_of_length
 {
 	std::map<std::string, double> m;
 	std::vector<std::string> bond;
@@ -43,20 +43,22 @@ std::map<std::string, double> SingletonTrajectories::create_map() //Generates di
 	return m;
 }
 
-void SingletonTrajectories::add_bond_type(std::vector<std::string> type) //adds type to list_of_types
+void set_of_trajectories::add_bond_type(std::vector<std::string> type) //adds type to list_of_types
 {
 	list_of_bond_types.push_back(type);
 }
 
-SingletonTrajectories::SingletonTrajectories() {
+set_of_trajectories::set_of_trajectories() {
 	dict_of_lengths = create_map(); 
 }
 
-size_t SingletonTrajectories::add_trajectory(Trajectory* traj) {
+set_of_trajectories::~set_of_trajectories() {}
+
+size_t set_of_trajectories::add_trajectory(trajectory* traj) {
 	list_of_trajectories.push_back(traj);
 	return list_of_trajectories.size() - 1;
 }
 
-Trajectory* SingletonTrajectories::return_trajectory(int index) {
+trajectory* set_of_trajectories::return_trajectory(int index) {
 	return list_of_trajectories[index];
 }

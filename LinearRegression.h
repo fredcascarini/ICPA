@@ -3,14 +3,14 @@
 
 #include <vector>
 
-std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double nSegSize, double start);
+std::vector<double> get_linear_fit(std::vector<double> data, double r2_tol, double n_seg_size, double start);
 /*
 	Returns linear fit to set of data
 
 	Input:
 	data		:	vector of doubles, input data
-	r2tol		:	tolerance in r^2
-	nSegSize	:	size of minimum segment of data to be fitted
+	r2_tol		:	tolerance in r^2
+	n_seg_size	:	size of minimum segment of data to be fitted
 	start		:	index of initial point in data to work from
 
 	Output:
@@ -21,13 +21,13 @@ std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double 
 
 */
 
-std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<double>& ydata, double min, double max);
+std::vector<double> lin_regress(std::vector<double> x_data, const std::vector<double>& y_data, double min, double max);
 /*
 	Uses a boost accumulator to optimise linear regression of input data
 
 	Input:
-	xdata		:	data to be analysed (x coordinates)
-	ydata		:	data to be analysed (y coordinates)
+	x_data		:	data to be analysed (x coordinates)
+	y_data		:	data to be analysed (y coordinates)
 	min			:	lower index to analyse from
 	max			:	upper index to analyse to
 
@@ -38,7 +38,7 @@ std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<doub
 	result[2]	:	r value of linear segment
 */
 
-std::vector<double> GausKern(double sigma, int width);
+std::vector<double> gaus_kern(double sigma, int width);
 /*
 	Returns a normalised 1D gaussian kernel for use in gaussian blurring. Mean is taken as centrepoint of kernel
 
@@ -51,7 +51,7 @@ std::vector<double> GausKern(double sigma, int width);
 */
 
 
-std::vector<double> GausBlur(std::vector<double> data, int width, double sigma);
+std::vector<double> gaus_blur(std::vector<double> data, int width, double sigma);
 /*
 	Blurs a set of data by successive Gaussian kernels
 

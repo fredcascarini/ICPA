@@ -119,22 +119,22 @@
     <ClCompile Include="$(SolutionDir)\ICPanalysis.cpp">
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
     </ClCompile>
-    <ClCompile Include="CoordSet.cpp" />
-    <ClCompile Include="SingletonTrajectories.cpp" />
+    <ClCompile Include="coord_set.cpp" />
+    <ClCompile Include="set_of_trajectories.cpp" />
     <ClCompile Include="LinearRegression.cpp" />
     <ClCompile Include="Trajectory.cpp" />
-    <ClCompile Include="TrajectoryPoint.cpp" />
+    <ClCompile Include="trajectory_point.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CoordSet.h" />
+    <ClInclude Include="coord_set.h" />
     <ClInclude Include="LinearRegression.h" />
-    <ClInclude Include="SingletonTrajectories.h">
+    <ClInclude Include="set_of_trajectories.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Trajectory.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="TrajectoryPoint.h" />
+    <ClInclude Include="trajectory_point.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

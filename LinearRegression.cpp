@@ -14,20 +14,20 @@
 using namespace boost::accumulators;
 
 //following translated from python
-std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double nSegSize, double start)
+std::vector<double> get_linear_fit(std::vector<double> data, double r2tol, double nSegSize, double start)
 {
-	std::vector<double> xData;
+	std::vector<double> x_data;
 	std::vector<double> res;
-	std::vector<double> linRegResult;
+	std::vector<double> lin_reg_result;
 
 	double slope;
 	double intercept;
 	double r2;
-	auto nData = static_cast<double>(data.size());
-	double iLinEnd;
-	double segEnd;
+	auto n_data = static_cast<double>(data.size());
+	double i_lin_end;
+	double seg_end;
 
-	iLinEnd = 0;
+	i_lin_end = 0;
 
 	if (r2tol <= 0.0) {
 		r2tol = 0.01;
@@ -36,44 +36,44 @@ std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double 
 		r2tol = 1;
 	}
 
-	if (nSegSize > nData) {
-		nSegSize = nData;
+	if (nSegSize > n_data) {
+		nSegSize = n_data;
 	}
 
-	auto nSegNum = (nData / nSegSize);
+	auto n_seg_num = n_data / nSegSize;
 
 	for (unsigned long i = 0; i < data.size(); i++)
 	{
-		xData.push_back(static_cast<double>(i));
+		x_data.push_back(static_cast<double>(i));
 	}
 
-	for (long i = 0; i <= nSegNum; i++)
+	for (long i = 0; i <= n_seg_num; i++)
 	{
-		iLinEnd += nSegSize;
+		i_lin_end += nSegSize;
 
-		segEnd = (start + iLinEnd < data.size()) ? (start + iLinEnd) : data.size() - 1;
+		seg_end = start + i_lin_end < data.size() ? start + i_lin_end : data.size() - 1;
 
-		linRegResult = LinRegress(xData, data, start, segEnd);
+		lin_reg_result = lin_regress(x_data, data, start, seg_end);
 
-		r2 = linRegResult[2];
+		r2 = lin_reg_result[2];
 
 		if (r2 * r2 >= r2tol) {
-			slope = linRegResult[0];
-			intercept = linRegResult[1];
+			slope = lin_reg_result[0];
+			intercept = lin_reg_result[1];
 		}
 
-		else if (segEnd == data.size() - 1) {
+		else if (seg_end == data.size() - 1) {
 			break;
 		}
 
 		else {
-			iLinEnd = (iLinEnd != nSegSize) ? (iLinEnd - nSegSize) : 1;
+			i_lin_end = i_lin_end != nSegSize ? i_lin_end - nSegSize : 1;
 			break;
 
 		}
 	}
 
-	res.push_back(iLinEnd);
+	res.push_back(i_lin_end);
 	res.push_back(slope);
 	res.push_back(intercept);
 
@@ -81,7 +81,7 @@ std::vector<double> GetLinearFit(std::vector<double> data, double r2tol, double 
 }
 
 //following translated from python's scipy library
-std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<double>& ydata, double min, double max) 
+std::vector<double> lin_regress(std::vector<double> xdata, const std::vector<double>& ydata, double min, double max) 
 {
 	accumulator_set<double, stats<tag::mean, tag::variance, tag::covariance<double, tag::covariate1> > > x_acc;
 	accumulator_set<double, stats<tag::mean, tag::variance, tag::covariance<double, tag::covariate1> > > y_acc;
@@ -133,7 +133,7 @@ std::vector<double> LinRegress(std::vector<double> xdata, const std::vector<doub
 }
 
 
-std::vector<double> GausKern(double sigma, int width) 
+std::vector<double> gaus_kern(double sigma, int width) 
 {
 
 	std::vector<double> kernel;
@@ -152,23 +152,23 @@ std::vector<double> GausKern(double sigma, int width)
 	return kernel;
 }
 
-std::vector<double> GausBlur(std::vector<double> data, int width, double sigma)
+std::vector<double> gaus_blur(std::vector<double> data, int width, double sigma)
 {
-	auto GK =  GausKern(sigma, width);
-	std::vector<double> Result;
+	auto gk =  gaus_kern(sigma, width);
+	std::vector<double> result;
 
-	auto centrePoint = static_cast<int>(std::round(width / 2));
+	auto centre_point = static_cast<int>(round(width / 2));
 
 	for (unsigned long i = 0; i < data.size(); ++i) {
 		double value = 0;
 		for (long ii = 0; ii <= width; ++i) {
-			if (( i + ii - centrePoint ) < 0) { continue; }
-			else if (((i + ii - centrePoint) > data.size())) { continue; }
-			else { value += data[ii] * GK[ii]; }
+			if (i + ii - centre_point < 0) { continue; }
+			if (i + ii - centre_point > data.size()) { continue; }
+			value += data[ii] * gk[ii];
 		}
-		Result.push_back(value);
+		result.push_back(value);
 	}
 
-	return Result;
+	return result;
 }
 

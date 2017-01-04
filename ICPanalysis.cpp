@@ -3,39 +3,35 @@
 #include <vector>
 #include <iostream>
 #include <iterator>
-#include <algorithm>
 #include <fstream>
-#include <typeinfo>
 #include <boost/tokenizer.hpp>
 
 #include <ctime>
 
-#include "SingletonTrajectories.h"
-#include "Trajectory.h"
+#include "set_of_trajectories.h"
+#include "trajectory.h"
 #include "CoordSet.h"
-#include "TrajectoryPoint.h"
-#include "LinearRegression.h"
 
 using namespace std;
 using namespace boost;
 
-SingletonTrajectories* s = SingletonTrajectories::Instance();
+set_of_trajectories* s = set_of_trajectories::instance();
 
 vector<string> StringSplit(string s, string delimiter) {
 
-	size_t pos = 0;
+	size_t pos;
 
 	string token;
 	
-	vector<string> SplitString;
+	vector<string> split_string;
 
 	while ((pos = s.find(delimiter)) != string::npos) {
 		token = s.substr(0, pos);
-		SplitString.push_back(token);
+		split_string.push_back(token);
 		s = s.substr(pos + delimiter.length());
 	}
 
-	return SplitString;
+	return split_string;
 }
 
 
@@ -56,13 +52,13 @@ int main() {
 	char_separator<char> sep(" ");
 	typedef tokenizer< char_separator<char> > Tokenizer;
 
-	vector < vector <string> > vecTraj;
+	vector < vector <string> > vec_traj;
 	vector <string> vec;
 	string line;
 	double last_traj_no;
-	bool newTraj;
+	bool new_traj;
 
-	newTraj = true;
+	new_traj = true;
 
 	auto tracker = 0;
 
@@ -80,20 +76,20 @@ int main() {
 
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
-		if (newTraj) {
+		if (new_traj) {
 			cout << "\n\n";
-			vecTraj.push_back(vec);
+			vec_traj.push_back(vec);
 			last_traj_no = stod(vec[0]);
-			newTraj = false;
+			new_traj = false;
 			continue;
 		}
 		if (stod(vec[0]) == last_traj_no) {
-			vecTraj.push_back(vec);
+			vec_traj.push_back(vec);
 			continue;
 		}
-		auto traj = new Trajectory (s,vecTraj);
-		vecTraj.clear();
-		vecTraj.push_back(vec);
+		auto traj = new trajectory (s,vec_traj);
+		vec_traj.clear();
+		vec_traj.push_back(vec);
 		last_traj_no = stod(vec[0]);
 	}
 

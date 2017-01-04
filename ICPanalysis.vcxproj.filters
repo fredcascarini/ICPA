@@ -21,36 +21,36 @@
     <ClCompile Include="$(SolutionDir)\ICPanalysis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SingletonTrajectories.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Trajectory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TrajectoryPoint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CoordSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LinearRegression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="coord_set.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="set_of_trajectories.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="trajectory_point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SingletonTrajectories.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TrajectoryPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Trajectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CoordSet.h">
+    <ClInclude Include="LinearRegression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LinearRegression.h">
+    <ClInclude Include="coord_set.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="set_of_trajectories.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="trajectory_point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
