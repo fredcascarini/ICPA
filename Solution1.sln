@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ICPanalysis", "ICPanalysis.vcxproj", "{143E70C5-E456-4955-A18C-E0EF5E90F365}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ICPAtests", "..\ICPAtests\ICPAtests.vcxproj", "{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -24,6 +26,14 @@ Global
 		{143E70C5-E456-4955-A18C-E0EF5E90F365}.Release|x64.Build.0 = Release|x64
 		{143E70C5-E456-4955-A18C-E0EF5E90F365}.Release|x86.ActiveCfg = Release|Win32
 		{143E70C5-E456-4955-A18C-E0EF5E90F365}.Release|x86.Build.0 = Release|Win32
+		{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}.Debug|x64.ActiveCfg = Debug|x64
+		{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}.Debug|x64.Build.0 = Debug|x64
+		{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}.Debug|x86.ActiveCfg = Debug|Win32
+		{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}.Debug|x86.Build.0 = Debug|Win32
+		{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}.Release|x64.ActiveCfg = Release|x64
+		{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}.Release|x64.Build.0 = Release|x64
+		{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}.Release|x86.ActiveCfg = Release|Win32
+		{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
