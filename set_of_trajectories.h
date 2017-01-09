@@ -24,7 +24,7 @@ public:
 
 	int										find_bond_type_index(std::vector<std::string> type_to_indx);	//finds index of specified type in list_of_bond_types
 	double									find_in_lengths(std::string bond) const;						//returns length of bond in dict_of_lengths
-	bool									test_bound(std::vector<std::string> bond, double length) const;	//returns whether length is less than or equal to maximum bound length of the bond
+	bool									test_bound(std::string bond_as_string, double length) const;	//returns whether length is less than or equal to maximum bound length of the bond
 	size_t									add_trajectory(trajectory* traj);								//add trajectory pointer to list_of_trajectories
 	trajectory*								return_trajectory(int index);									// returns pointer at specified index
 
@@ -32,9 +32,9 @@ public:
 private:
 
 	set_of_trajectories();																			//Generates singleton instance
-	~set_of_trajectories();																			//Destructor
+	~set_of_trajectories() {};																			//Destructor
 
-	static std::map<std::string, double>		create_map();										//Generates dict_of_length
+	static std::map<std::string, double>				create_map();										//Generates dict_of_length
 	void										add_bond_type(std::vector<std::string> type);		//adds type to list_of_types
 
 	std::map<std::string, double>				dict_of_lengths;									//dict of bond lengths

@@ -2,28 +2,23 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <iterator>
-#include <algorithm>
 #include <fstream>
-#include <typeinfo>
 #include <boost/tokenizer.hpp>
 
 #include <ctime>
 
-#include "SingletonTrajectories.h"
-#include "Trajectory.h"
-#include "CoordSet.h"
-#include "TrajectoryPoint.h"
-#include "LinearRegression.h"
+#include "set_of_trajectories.h"
+#include "trajectory.h"
+#include "coord_set.h"
 
 using namespace std;
 using namespace boost;
 
-SingletonTrajectories* s = SingletonTrajectories::Instance();
+set_of_trajectories* s = set_of_trajectories::instance();
 
 vector<string> StringSplit(string s, string delimiter) {
 
-	size_t pos = 0;
+	size_t pos;
 
 	string token;
 	
@@ -59,7 +54,7 @@ int main() {
 	vector < vector <string> > vecTraj;
 	vector <string> vec;
 	string line;
-	double last_traj_no;
+	double last_traj_no = 0.0;
 	bool newTraj;
 
 	newTraj = true;
@@ -72,7 +67,7 @@ int main() {
 
 		if (tracker % print_on == 0) { 
 			duration2 = (clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
-			cout << "\n\n" << tracker/print_on << "\t" << duration2 - duration << "\n\n"; 
+			cout << tracker/print_on << "\t" << duration2 - duration << "\n"; 
 			duration = duration2;
 		}
 
@@ -81,7 +76,6 @@ int main() {
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
 		if (newTraj) {
-			cout << "\n\n";
 			vecTraj.push_back(vec);
 			last_traj_no = stod(vec[0]);
 			newTraj = false;
@@ -91,7 +85,7 @@ int main() {
 			vecTraj.push_back(vec);
 			continue;
 		}
-		auto traj = Trajectory (s,vecTraj);
+		auto traj = trajectory (s,vecTraj);
 		traj.analyse();
 		vecTraj.clear();
 		vecTraj.push_back(vec);

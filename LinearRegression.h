@@ -3,7 +3,7 @@
 
 #include <vector>
 
-std::vector<double> get_linear_fit(std::vector<double> data, double r2_tol, double n_seg_size, double start);
+std::vector<double> get_linear_fit(std::vector<double> data, double r2_tol, int n_seg_size, int start);
 /*
 	Returns linear fit to set of data
 
@@ -21,7 +21,7 @@ std::vector<double> get_linear_fit(std::vector<double> data, double r2_tol, doub
 
 */
 
-std::vector<double> lin_regress(std::vector<double> x_data, const std::vector<double>& y_data, double min, double max);
+std::vector<double> lin_regress(std::vector<double> x_data, const std::vector<double>& y_data, int min, int max);
 /*
 	Uses a boost accumulator to optimise linear regression of input data
 
@@ -37,6 +37,8 @@ std::vector<double> lin_regress(std::vector<double> x_data, const std::vector<do
 	result[1]	:	intercept of linear segment
 	result[2]	:	r value of linear segment
 */
+
+std::vector<double> mvc_xy(std::vector<double> xdata, std::vector<double> ydata, int min, int max);
 
 std::vector<double> gaus_kern(double sigma, int width);
 /*

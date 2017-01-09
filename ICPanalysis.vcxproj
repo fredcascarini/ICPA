@@ -122,7 +122,7 @@
     <ClCompile Include="coord_set.cpp" />
     <ClCompile Include="set_of_trajectories.cpp" />
     <ClCompile Include="LinearRegression.cpp" />
-    <ClCompile Include="Trajectory.cpp" />
+    <ClCompile Include="trajectory.cpp" />
     <ClCompile Include="trajectory_point.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -131,7 +131,7 @@
     <ClInclude Include="set_of_trajectories.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Trajectory.h">
+    <ClInclude Include="trajectory.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="trajectory_point.h" />
