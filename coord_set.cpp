@@ -13,35 +13,37 @@
 
 using namespace std;
 
-coord_set::coord_set(vector<string> dataline, set_of_trajectories* ST)  //constructor for data coordinate sets
-	: data_line_(dataline) , st_(ST) {
+coord_set::coord_set(vector<string> dataline, set_of_trajectories* ST) //constructor for data coordinate sets
+	: data_line_(dataline), st_(ST)
+{
 	number_of_data_points = dataline.size() - num_header_cols;
 	name = dataline[1];
 	atoms = SplitAtoms(name);
 	index = ST->find_bond_type_index(atoms);
 	int num_atoms = atoms.size();
 
-	switch (num_atoms) {
+	switch (num_atoms)
+	{
 	case (2):
-	{
-		type = dataType::length;
-		break;
-	}
+		{
+			type = dataType::length;
+			break;
+		}
 	case (3):
-	{
-		type = dataType::angle;
-		break;
-	}
+		{
+			type = dataType::angle;
+			break;
+		}
 	case (4):
-	{
-		type = dataType::dihedral;
-		break;
-	}
+		{
+			type = dataType::dihedral;
+			break;
+		}
 	default:
-	{
-		type = dataType::error;
-		break;
-	}
+		{
+			type = dataType::error;
+			break;
+		}
 	}
 }
 
@@ -61,13 +63,13 @@ coord_set::coord_set(vector<coord_set*> setOfCSInstances) //constructor for traj
 	vector<string> type_set;
 	std::cout << setOfCSInstances[0]->location_of_traj_points.size() << "  ";
 
-	for (auto i = 0; i < number_of_coordinate_sets; ++i) { //iterate over setOfCSInstances
-		if (setOfCSInstances[i]->location_of_traj_points.size() != 1) {
+	for (auto i = 0; i < number_of_coordinate_sets; ++i)
+	{ //iterate over setOfCSInstances
+		if (setOfCSInstances[i]->location_of_traj_points.size() != 1)
+		{
 			startPoints.push_back(setOfCSInstances[i]->location_of_traj_points[min_element_index + 1]); //initialise startPoints with start point of SECOND section (i.e. where to read the first section up to)
 		}
-		else {
-			startPoints.push_back(number_of_data_points);
-		}
+		else { startPoints.push_back(number_of_data_points); }
 		currentTrajP.push_back(setOfCSInstances[i]->list_of_traj_points[min_element_index]);
 		min_element_change = false;
 	}
@@ -77,15 +79,20 @@ coord_set::coord_set(vector<coord_set*> setOfCSInstances) //constructor for traj
 	auto min_element = min_vals[0];
 	auto min_element_location = min_vals[1];
 
-	for (auto i = 0; i < number_of_data_points; ++i) {
-		if (min_element_change) {
-			while (i == min_element) { //in case there are multiple identical min elements
+	for (auto i = 0; i < number_of_data_points; ++i)
+	{
+		if (min_element_change)
+		{
+			while (i == min_element)
+			{ //in case there are multiple identical min elements
 				auto current_min = startPoints[min_element_location]; //establishes current min value for comparison
 				auto working_min = current_min; //initialises working min to a value that will make (working_min <= current_min) true
 				auto iterator = 0;
 
-				while (working_min <= current_min) { //finds the next minimum value
-					if (iterator == setOfCSInstances[min_element_location]->location_of_traj_points.size() - 1) { //if it has reached the end of the list of minimums, sets the next minimum as the end of the data
+				while (working_min <= current_min)
+				{ //finds the next minimum value
+					if (iterator == setOfCSInstances[min_element_location]->location_of_traj_points.size() - 1)
+					{ //if it has reached the end of the list of minimums, sets the next minimum as the end of the data
 						iterator++;
 						working_min = number_of_data_points;
 						break;
@@ -98,14 +105,17 @@ coord_set::coord_set(vector<coord_set*> setOfCSInstances) //constructor for traj
 				currentTrajP[min_element_location] = setOfCSInstances[min_element_location]->list_of_traj_points[iterator - 1]; //update the current trajP for the one that has been maxed
 				min_vals.clear(); //clears previous assignment from find_min_val_loc
 				min_vals = find_min_val_loc(startPoints);
-				min_element = min_vals[0];	min_element_location = min_vals[1]; //saves new values
+				min_element = min_vals[0];
+				min_element_location = min_vals[1]; //saves new values
 			}
 			min_element_change = false; //min element change has been done
 		}
 
-		if (i < min_element) {
+		if (i < min_element)
+		{
 			vector<anyType> currentTimeCoSets;
-			for (auto iii = 0; iii < number_of_coordinate_sets; ++iii) {
+			for (auto iii = 0; iii < number_of_coordinate_sets; ++iii)
+			{
 				currentTimeCoSets.push_back(setOfCSInstances[iii]->return_atoms());
 				currentTimeCoSets.push_back(currentTrajP[iii]->return_coordinate());
 				currentTimeCoSets.push_back(currentTrajP[iii]->return_intercept());
@@ -115,18 +125,16 @@ coord_set::coord_set(vector<coord_set*> setOfCSInstances) //constructor for traj
 				type_set.push_back(type);
 			}
 		}
-		if (i == min_element - 1) {
-			min_element_change = true;
-		}
+		if (i == min_element - 1) { min_element_change = true; }
 	}
 	//cout << type_set.size() << "\n";
 }
 
 
-vector<string> coord_set::SplitAtoms(string atoms) {
-
+vector<string> coord_set::SplitAtoms(string atoms)
+{
 	boost::char_separator<char> sep("_");
-	typedef boost::tokenizer< boost::char_separator<char> > Tokenizer;
+	typedef boost::tokenizer<boost::char_separator<char>> Tokenizer;
 
 	vector<string> result;
 
@@ -136,14 +144,17 @@ vector<string> coord_set::SplitAtoms(string atoms) {
 	return result;
 }
 
-inline vector<int> coord_set::find_min_val_loc(vector<int> arr) {
+inline vector<int> coord_set::find_min_val_loc(vector<int> arr)
+{
 	auto min_element = *arr.begin();
 	auto min_element_location = 0;
 	auto index = 0;
 
-	for (auto it = arr.begin(); it != arr.end(); ++it) {
+	for (auto it = arr.begin(); it != arr.end(); ++it)
+	{
 		auto val = *it;
-		if (val < min_element) {
+		if (val < min_element)
+		{
 			min_element = val;
 			min_element_location = index;
 		}
@@ -159,7 +170,11 @@ inline vector<int> coord_set::find_min_val_loc(vector<int> arr) {
 	return results;
 }
 
-size_t coord_set::add_traj_point(trajectory_point* TrPoint) { list_of_traj_points.push_back(TrPoint);	return list_of_traj_points.size() - 1; }
+size_t coord_set::add_traj_point(trajectory_point* TrPoint)
+{
+	list_of_traj_points.push_back(TrPoint);
+	return list_of_traj_points.size() - 1;
+}
 
 string coord_set::DetermineTrajType(vector<boost::any> traj_details) const
 {
@@ -171,30 +186,25 @@ string coord_set::DetermineTrajType(vector<boost::any> traj_details) const
 	auto C1testbool = false;
 
 
-	for (unsigned int i = 0; i < traj_details.size(); i += 5) {
+	for (unsigned int i = 0; i < traj_details.size(); i += 5)
+	{
 		auto test = traj_details[i];
 		auto bond = boost::any_cast<vector<string>>(traj_details[i]);
 		auto bond_as_string = bond[0];
-		for (auto ii = 1; ii != bond.size(); ++ii) {
-			bond_as_string = bond_as_string + "_" + bond[ii];
-		}
-		if (regex_match(bond_as_string, HCL_test) == 1) {
+		for (auto ii = 1; ii != bond.size(); ++ii) { bond_as_string = bond_as_string + "_" + bond[ii]; }
+		if (regex_match(bond_as_string, HCL_test) == 1)
+		{
 			Dtest.push_back(boost::any_cast<bool>(traj_details[i + 4])); //test if Cl is bound to H
 		}
-		if (regex_match(bond_as_string, C1_test) == 1 || regex_match(bond_as_string, C2_test) == 1) {
-			Dtest.push_back(boost::any_cast<double>(traj_details[i + 3]) > 0.0);  //test if Cl is travelling away from each carbon
-		}
-		if (regex_match(bond_as_string, C1_test) == 1)
+		if (regex_match(bond_as_string, C1_test) == 1 || regex_match(bond_as_string, C2_test) == 1)
 		{
-			C1testbool = boost::any_cast<bool>(traj_details[i + 4]);
+			Dtest.push_back(boost::any_cast<double>(traj_details[i + 3]) > 0.0); //test if Cl is travelling away from each carbon
 		}
-
+		if (regex_match(bond_as_string, C1_test) == 1) { C1testbool = boost::any_cast<bool>(traj_details[i + 4]); }
 	}
 
 	auto DtestBool = true;
-	for (unsigned int ii = 0; ii != Dtest.size(); ++ii) {
-		if (Dtest[ii] == false) { DtestBool = false; }
-	}
+	for (unsigned int ii = 0; ii != Dtest.size(); ++ii) { if (Dtest[ii] == false) { DtestBool = false; } }
 
 	if (DtestBool && C1testbool) { return "Err"; }
 	if (DtestBool) { return "D"; }
@@ -205,16 +215,14 @@ string coord_set::DetermineTrajType(vector<boost::any> traj_details) const
 
 trajectory_point* coord_set::return_traj_point(int index) { return list_of_traj_points[index]; }
 
-void coord_set::CreateTrajPoints(vector<string> Data, set_of_trajectories* ST) {
-
+void coord_set::CreateTrajPoints(vector<string> Data, set_of_trajectories* ST)
+{
 	vector<double> dData;
 
-	for (unsigned long i = num_header_cols; i < Data.size(); ++i) {
-		dData.push_back(stod(Data[i]));
-	}
+	for (unsigned long i = num_header_cols; i < Data.size(); ++i) { dData.push_back(stod(Data[i])); }
 	auto start = num_header_cols;
-	while (start < number_of_data_points) {
-
+	while (start < number_of_data_points)
+	{
 		auto EndSlopeIntercept = get_linear_fit(dData, 0.95, 1.0, start);
 		unsigned int ESIend = static_cast<int>(round(EndSlopeIntercept[0]));
 		auto end = (start + ESIend < dData.size()) ? (start + ESIend) : dData.size();

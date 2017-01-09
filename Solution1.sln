@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ICPanalysis", "ICPanalysis.vcxproj", "{143E70C5-E456-4955-A18C-E0EF5E90F365}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ICPAtests", "..\ICPAtests\ICPAtests.vcxproj", "{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ICPAtests", "..\ICPA-tests\ICPAtests.vcxproj", "{C4D0CB91-3B08-4EBA-BDC8-B5319179D7C9}"
 EndProject
 Global
 	GlobalSection(Performance) = preSolution

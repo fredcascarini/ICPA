@@ -66,4 +66,3 @@ std::vector<double> gaus_blur(std::vector<double> data, int width, double sigma)
 	std::vector<double> Result
 */
 #endif
-

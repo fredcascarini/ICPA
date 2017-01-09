@@ -16,15 +16,16 @@ using namespace boost;
 
 set_of_trajectories* s = set_of_trajectories::instance();
 
-vector<string> StringSplit(string s, string delimiter) {
-
+vector<string> StringSplit(string s, string delimiter)
+{
 	size_t pos;
 
 	string token;
-	
+
 	vector<string> SplitString;
 
-	while ((pos = s.find(delimiter)) != string::npos) {
+	while ((pos = s.find(delimiter)) != string::npos)
+	{
 		token = s.substr(0, pos);
 		SplitString.push_back(token);
 		s = s.substr(pos + delimiter.length());
@@ -34,8 +35,8 @@ vector<string> StringSplit(string s, string delimiter) {
 }
 
 
-int main() {
-
+int main()
+{
 	clock_t start;
 	start = clock();
 	double duration;
@@ -46,13 +47,17 @@ int main() {
 	string data("file_icp.dat");
 
 	ifstream input(data.c_str());
-	if (!input.is_open()) { cout << "Error in opening input file"; return 1; } 
+	if (!input.is_open())
+	{
+		cout << "Error in opening input file";
+		return 1;
+	}
 
 	char_separator<char> sep(" ");
-	typedef tokenizer< char_separator<char> > Tokenizer;
+	typedef tokenizer<char_separator<char>> Tokenizer;
 
-	vector < vector <string> > vecTraj;
-	vector <string> vec;
+	vector<vector<string>> vecTraj;
+	vector<string> vec;
 	string line;
 	double last_traj_no = 0.0;
 	bool newTraj;
@@ -65,9 +70,10 @@ int main() {
 	{
 		auto print_on = 50;
 
-		if (tracker % print_on == 0) { 
+		if (tracker % print_on == 0)
+		{
 			duration2 = (clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
-			cout << tracker/print_on << "\t" << duration2 - duration << "\n"; 
+			cout << tracker / print_on << "\t" << duration2 - duration << "\n";
 			duration = duration2;
 		}
 
@@ -75,17 +81,19 @@ int main() {
 
 		Tokenizer tok(line, sep);
 		vec.assign(tok.begin(), tok.end());
-		if (newTraj) {
+		if (newTraj)
+		{
 			vecTraj.push_back(vec);
 			last_traj_no = stod(vec[0]);
 			newTraj = false;
 			continue;
 		}
-		if (stod(vec[0]) == last_traj_no) {
+		if (stod(vec[0]) == last_traj_no)
+		{
 			vecTraj.push_back(vec);
 			continue;
 		}
-		auto traj = trajectory (s,vecTraj);
+		auto traj = trajectory(s, vecTraj);
 		traj.analyse();
 		vecTraj.clear();
 		vecTraj.push_back(vec);
@@ -94,5 +102,5 @@ int main() {
 
 	cout << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
 
-    return 0;
+	return 0;
 }
