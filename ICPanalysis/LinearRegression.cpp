@@ -27,6 +27,7 @@ std::vector<double> get_linear_fit(std::vector<double> data, double r2tol, int n
 	auto n_data = static_cast<int>(data.size());
 	int i_lin_end = 0;
 	int seg_end;
+	double r2max = r2tol;
 
 	//fix erroneous inputs
 	if (r2tol <= 0.0) { r2tol = 0.01; }
@@ -51,10 +52,11 @@ std::vector<double> get_linear_fit(std::vector<double> data, double r2tol, int n
 		r = lin_reg_result[2];
 
 		//slope and intercept hold the values for the last fit that fulfils the r2tol requirement
-		if (r * r >= r2tol)
+		if (r * r >= r2max)
 		{
 			slope = lin_reg_result[0];
 			intercept = lin_reg_result[1];
+			r2max = r * r;
 		}
 
 		else if (seg_end == data.size() - 1) { break; }
@@ -100,8 +102,8 @@ std::vector<double> lin_regress(std::vector<double> xdata, const std::vector<dou
 	mvc_xy_res = mvc_xy(xdata, ydata, min, max);
 
 	double r;
-	auto r_num = mvc_xy_res[4];
-	auto r_den = sqrt(mvc_xy_res[2] * mvc_xy_res[3]);
+	auto r_num = mvc_xy_res[4]; //r_num = covariance
+	auto r_den = sqrt(mvc_xy_res[2] * mvc_xy_res[3]); //r_den = sqrt(variance(x) * variance(y))
 
 	double slope;
 	double intercept;
@@ -109,13 +111,13 @@ std::vector<double> lin_regress(std::vector<double> xdata, const std::vector<dou
 	if (r_den == 0.0) { r = 0.0; }
 	else
 	{
-		r = r_num / r_den;
+		r = r_num / r_den; 
 		if (r > 1.0) { r = 1.0; }
 		else if (r < -1.0) { r = -1.0; }
 	}
 
-	slope = r_num / mvc_xy_res[2];
-	intercept = mvc_xy_res[1] - slope * mvc_xy_res[0];
+	slope = mvc_xy_res[4] / mvc_xy_res[2]; //covariance / variance(x)
+	intercept = mvc_xy_res[1] - slope * mvc_xy_res[0]; // mean(y) - slope * mean(x)
 
 	result.push_back(slope);
 	result.push_back(intercept);
