@@ -43,16 +43,18 @@ void trajectory::analyse_coord_sets(std::vector<coord_set*> setOfCSInstances)
 	auto min_element_change = true;
 
 	vector<string> type_set;
-	std::cout << setOfCSInstances[0]->location_of_traj_points.size() << "  ";
+	std::cout << setOfCSInstances[0]->return_tP_list().size() << "  ";
 
 	for (auto i = 0; i < number_of_coordinate_sets; ++i)
 	{ //iterate over setOfCSInstances
-		if (setOfCSInstances[i]->location_of_traj_points.size() != 1)
+		auto tp_loc = setOfCSInstances[i]->return_tP_loc();
+		auto tp_list = setOfCSInstances[i]->return_tP_list();
+		if (tp_loc.size() != 1)
 		{
-			startPoints.push_back(setOfCSInstances[i]->location_of_traj_points[min_element_index + 1]); //initialise startPoints with start point of SECOND section (i.e. where to read the first section up to)
+			startPoints.push_back(tp_loc[min_element_index + 1]); //initialise startPoints with start point of SECOND section (i.e. where to read the first section up to)
 		}
 		else { startPoints.push_back(number_of_data_points); }
-		currentTrajP.push_back(setOfCSInstances[i]->list_of_traj_points[min_element_index]);
+		currentTrajP.push_back(tp_list[min_element_index]);
 		min_element_change = false;
 	}
 
@@ -73,18 +75,18 @@ void trajectory::analyse_coord_sets(std::vector<coord_set*> setOfCSInstances)
 
 				while (working_min <= current_min)
 				{ //finds the next minimum value
-					if (iterator == setOfCSInstances[min_element_location]->location_of_traj_points.size() - 1)
+					if (iterator == setOfCSInstances[min_element_location]->return_tP_loc().size() - 1)
 					{ //if it has reached the end of the list of minimums, sets the next minimum as the end of the data
 						iterator++;
 						working_min = number_of_data_points;
 						break;
 					}
-					working_min = setOfCSInstances[min_element_location]->location_of_traj_points[iterator + 1]; //update the limit that has been reached with the next limit
+					working_min = setOfCSInstances[min_element_location]->return_tP_loc()[iterator + 1]; //update the limit that has been reached with the next limit
 					iterator++; //steps up iterator - this needs to be undone if the while loop ends
 				}
 
 				startPoints[min_element_location] = working_min; //updates the startPoints vector with the found minimum
-				currentTrajP[min_element_location] = setOfCSInstances[min_element_location]->list_of_traj_points[iterator - 1]; //update the current trajP for the one that has been maxed
+				currentTrajP[min_element_location] = setOfCSInstances[min_element_location]->return_tP_list()[iterator - 1]; //update the current trajP for the one that has been maxed
 				min_vals.clear(); //clears previous assignment from find_min_val_loc
 				min_vals = find_min_val_loc(startPoints);
 				min_element = min_vals[0];

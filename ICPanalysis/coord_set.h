@@ -24,11 +24,13 @@ public:
 	coord_set(std::vector<std::string> DataLine, set_of_trajectories* ST);
 
 	//simple accessor functions
-	std::vector<std::string>	return_atoms()	const { return atoms; }					//return atoms relevant to this coord_set as vector of strings
-	std::string					return_name()	const { return name; }					//return atoms relevant to this coord_set as a string
-	dataType					return_type()	const { return type; }					//return coordinate type as string
-	int							return_index()	const { return index; }					//return bond type index from ST as int
-	int							return_num_dp()	const { return number_of_data_points; }	//return number of individual data points in this coord set
+	std::vector<trajectory_point*>	return_tP_list()	const { return list_of_traj_points; }	//return list of pointers to trajpoint instances
+	std::vector<int>				return_tP_loc()		const { return location_of_traj_points; }	//return list of pointers to trajpoint instances
+	std::vector<std::string>		return_atoms()		const { return atoms; }					//return atoms relevant to this coord_set as vector of strings
+	std::string						return_name()		const { return name; }					//return atoms relevant to this coord_set as a string
+	dataType						return_type()		const { return type; }					//return coordinate type as string
+	int								return_index()		const { return index; }					//return bond type index from ST as int
+	int								return_num_dp()		const { return number_of_data_points; }	//return number of individual data points in this coord set
 
 	//other functions
 	std::vector<std::string>	SplitAtoms(std::string atoms);												//Split list of atoms into vector array of atom names
@@ -46,14 +48,14 @@ public:
 private:
 
 	//returned via simple accessor functions
-	std::vector<std::string> atoms; //string of atoms that co-ordinate refers to
-	std::string name;				//atoms as a single string
-	dataType type;					//coordinate type: length, angle, dihedral etc.
-	int index;						//bond type index from SingletonTrajectories
-	int number_of_data_points;		//number of individual data points in coord set
+	std::vector<trajectory_point*> list_of_traj_points; //vector of pointers to TrajectoryPoint instances
+	std::vector<std::string> atoms;						//string of atoms that co-ordinate refers to
+	std::string name;									//atoms as a single string
+	dataType type;										//coordinate type: length, angle, dihedral etc.
+	int index;											//bond type index from SingletonTrajectories
+	int number_of_data_points;							//number of individual data points in coord set
 
 	//other variables
-	std::vector<trajectory_point*> list_of_traj_points; //vector of pointers to TrajectoryPoint instances
 	std::vector<int> location_of_traj_points;			//vector of start indices of each traj point
 	std::vector<int> set_of_traj_types;					//vector of trajectory types (e.g. Roaming, C1 complex) as numbers
 
