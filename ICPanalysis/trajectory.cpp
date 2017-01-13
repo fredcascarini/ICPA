@@ -1,9 +1,10 @@
 #include "set_of_trajectories.h"
-#include "Trajectory.h"
+#include "trajectory.h"
 #include "trajectory_point.h"
 #include "coord_set.h"
 #include <iostream>
 #include <regex>
+#include <functional>
 
 using namespace std;
 
@@ -31,7 +32,7 @@ void trajectory::add_coord_set(coord_set* CoSet) { list_of_coord_sets.push_back(
 
 coord_set* trajectory::return_coord_set(int index) { return list_of_coord_sets[index]; }
 
-void trajectory::analyse_coord_sets(std::vector<coord_set*> setOfCSInstances)
+void trajectory::analyse_coord_sets(vector<coord_set*> setOfCSInstances) const
 {
 	typedef boost::any anyType;
 
@@ -43,7 +44,7 @@ void trajectory::analyse_coord_sets(std::vector<coord_set*> setOfCSInstances)
 	auto min_element_change = true;
 
 	vector<string> type_set;
-	std::cout << setOfCSInstances[0]->return_tP_list().size() << "  ";
+	cout << setOfCSInstances[0]->return_tP_list().size() << "  ";
 
 	for (auto i = 0; i < number_of_coordinate_sets; ++i)
 	{ //iterate over setOfCSInstances
@@ -59,7 +60,7 @@ void trajectory::analyse_coord_sets(std::vector<coord_set*> setOfCSInstances)
 	}
 
 	vector<int> min_vals;
-	min_vals = find_min_val_loc(startPoints);
+	min_vals = find_val_loc_by_fn<int>(startPoints, less<int>());
 	auto min_element = min_vals[0];
 	auto min_element_location = min_vals[1];
 
@@ -88,7 +89,7 @@ void trajectory::analyse_coord_sets(std::vector<coord_set*> setOfCSInstances)
 				startPoints[min_element_location] = working_min; //updates the startPoints vector with the found minimum
 				currentTrajP[min_element_location] = setOfCSInstances[min_element_location]->return_tP_list()[iterator - 1]; //update the current trajP for the one that has been maxed
 				min_vals.clear(); //clears previous assignment from find_min_val_loc
-				min_vals = find_min_val_loc(startPoints);
+				min_vals = find_val_loc_by_fn<int>(startPoints, less<int>());
 				min_element = min_vals[0];
 				min_element_location = min_vals[1]; //saves new values
 			}
@@ -101,7 +102,7 @@ void trajectory::analyse_coord_sets(std::vector<coord_set*> setOfCSInstances)
 			for (auto iii = 0; iii < number_of_coordinate_sets; ++iii)
 			{
 				currentTimeCoSets.push_back(setOfCSInstances[iii]->return_atoms());
-				currentTimeCoSets.push_back(currentTrajP[iii]->return_coordinate());
+				currentTimeCoSets.push_back(currentTrajP[iii]->return_lin_coordinate());
 				currentTimeCoSets.push_back(currentTrajP[iii]->return_intercept());
 				currentTimeCoSets.push_back(currentTrajP[iii]->return_slope());
 				currentTimeCoSets.push_back(currentTrajP[iii]->return_bound());
@@ -113,20 +114,20 @@ void trajectory::analyse_coord_sets(std::vector<coord_set*> setOfCSInstances)
 	}
 }
 
-
-inline vector<int> trajectory::find_min_val_loc(vector<int> arr)
+//compares values by operator - use std::greater, std::less or similar as second argument
+template<typename T> vector<int> trajectory::find_val_loc_by_fn(vector<T> arr, function<bool(T, T)> fn)
 {
-	auto min_element = *arr.begin();
-	auto min_element_location = 0;
+	auto curr_element = *arr.begin();
+	auto curr_element_location = 0;
 	auto index = 0;
 
 	for (auto it = arr.begin(); it != arr.end(); ++it)
 	{
 		auto val = *it;
-		if (val < min_element)
+		if (fn(val, curr_element))
 		{
-			min_element = val;
-			min_element_location = index;
+			curr_element = val;
+			curr_element_location = index;
 		}
 
 		index++;
@@ -134,8 +135,8 @@ inline vector<int> trajectory::find_min_val_loc(vector<int> arr)
 
 	vector<int> results;
 
-	results.push_back(min_element);
-	results.push_back(min_element_location);
+	results.push_back(curr_element);
+	results.push_back(curr_element_location);
 
 	return results;
 }

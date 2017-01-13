@@ -21,18 +21,20 @@ std::vector<double> get_linear_fit(std::vector<double> data, double r2tol, int n
 	std::vector<double> res;
 	std::vector<double> lin_reg_result;
 
+	auto n_data = static_cast<int>(data.size());
+
+	//fix erroneous inputs
+	if (r2tol <= 0.0) { r2tol = 0.01; }
+	else if (r2tol > 1.0) { r2tol = 1.0; }
+	if (nSegSize > n_data) { nSegSize = n_data; }
+
 	double slope;
 	double intercept;
 	double r;
-	auto n_data = static_cast<int>(data.size());
 	int i_lin_end = 0;
 	int seg_end;
 	double r2max = r2tol;
 
-	//fix erroneous inputs
-	if (r2tol <= 0.0) { r2tol = 0.01; }
-	else if (r2tol > 1.0) { r2tol = 1; }
-	if (nSegSize > n_data) { nSegSize = n_data; }
 
 	auto n_seg_num = n_data / nSegSize;
 
@@ -192,7 +194,7 @@ std::vector<double> gaus_blur(std::vector<double> data, int width, double sigma)
 		double value = 0;
 		for (long ii = 0; ii <= width; ++ii)
 		{
-			if (i + ii - centre_point < 0) { continue; }
+			if (i + ii - centre_point < 0.0) { continue; }
 			if (i + ii - centre_point > data.size()) { continue; }
 			value += data[ii] * gk[ii];
 		}

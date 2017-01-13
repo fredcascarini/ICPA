@@ -1,15 +1,14 @@
 #include "set_of_trajectories.h"
-#include "Trajectory.h"
+#include "trajectory.h"
 #include "coord_set.h"
 #include "trajectory_point.h"
 
-#include <algorithm>
-
-trajectory_point::trajectory_point(std::vector<double> IMcot, coord_set* CS, set_of_trajectories* ST, double INslope, double INintercept)
+trajectory_point::trajectory_point(std::vector<double> linCot, std::vector<double> trajCot, coord_set* CS, set_of_trajectories* ST, double INslope, double INintercept)
 {
-	Coordinates = IMcot;
-	index = CS->return_index();
+	LinCoordinates = linCot;
+	TrajCoordinates = trajCot;
 
+	index = CS->return_index();
 	slope = INslope;
 	intercept = INintercept;
 
@@ -18,4 +17,4 @@ trajectory_point::trajectory_point(std::vector<double> IMcot, coord_set* CS, set
 	CS->add_traj_point(this);
 }
 
-bool trajectory_point::bound(const set_of_trajectories* ST, coord_set* CS) { return ST->test_bound(CS->return_name(), *max_element(Coordinates.begin(), Coordinates.end())); }
+bool trajectory_point::bound(const set_of_trajectories* ST, coord_set* CS) const { return ST->test_bound(CS->return_name(), trajectory::find_val_loc_by_fn<double>(LinCoordinates, std::greater<double>())[0]); }

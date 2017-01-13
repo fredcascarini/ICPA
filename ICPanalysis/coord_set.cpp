@@ -1,5 +1,5 @@
 #include "set_of_trajectories.h"
-#include "Trajectory.h"
+#include "trajectory.h"
 #include "coord_set.h"
 #include "trajectory_point.h"
 
@@ -75,21 +75,22 @@ trajectory_point* coord_set::return_traj_point(int index) { return list_of_traj_
 
 void coord_set::CreateTrajPoints(vector<string> Data, set_of_trajectories* ST)
 {
-	vector<double> dData;
-
+	vector<double> dData; //data as double rather than as string
 	for (unsigned long i = num_header_cols; i < Data.size(); ++i) { dData.push_back(stod(Data[i])); }
+
+	vector<double> gbdData; //gaussian blurred dData
+	gbdData = gaus_blur(dData, 10, 5.0);
+
 	auto start = num_header_cols;
-	while (start < number_of_data_points)
-	{
-		auto EndSlopeIntercept = get_linear_fit(dData, 0.95, 1.0, start);
-		unsigned int ESIend = static_cast<int>(round(EndSlopeIntercept[0]));
-		auto end = (start + ESIend < dData.size()) ? (start + ESIend) : dData.size();
-		vector<double>::const_iterator start_of_vec = dData.begin();
-		vector<double> linearData(start_of_vec + start, start_of_vec + end);
-		auto trajP = new trajectory_point(linearData, this, ST, EndSlopeIntercept[1], EndSlopeIntercept[2]);
-		add_traj_point(trajP);
-		location_of_traj_points.push_back(start);
-		start = end + 1;
-	}
-	return;
+
+	//use linreg to find first (approach) section 
+	auto EndSlopeIntercept = get_linear_fit(dData, 0.95, 1.0, start);
+	unsigned int ESIend = static_cast<int>(round(EndSlopeIntercept[0]));
+	auto end = (start + ESIend < dData.size()) ? (start + ESIend) : dData.size();
+
+	vector<double>::const_iterator start_of_vec = dData.begin();
+	vector<double> linearData(start_of_vec + start, start_of_vec + end);
+	vector<double> trajectoryData(start_of_vec + end, start_of_vec + dData.size());
+
+	auto trajP = new trajectory_point(linearData, trajectoryData, this, ST, EndSlopeIntercept[1], EndSlopeIntercept[2]);
 }
