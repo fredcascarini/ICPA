@@ -11,6 +11,7 @@
 //#include <boost/accumulators/statistics/covariance.hpp>
 //#include <boost/accumulators/statistics/variates/covariate.hpp>
 #include <boost/math/distributions/normal.hpp>
+#include <iostream>
 
 //using namespace boost::accumulators;
 
@@ -36,7 +37,8 @@ std::vector<double> get_linear_fit(std::vector<double> data, double r2tol, int n
 	double r2max = r2tol;
 
 
-	auto n_seg_num = n_data / nSegSize;
+	//caps at 1ps
+	auto n_seg_num = 1000 / nSegSize;
 
 	//populate x_data with sequence of integers as long as vector data
 	for (unsigned long i = 0; i < data.size(); i++) { x_data.push_back(static_cast<double>(i)); }
@@ -170,14 +172,14 @@ std::vector<double> gaus_kern(double sigma, int width)
 	auto mean = width / 2.0;
 	auto sum = 0.0;
 	boost::math::normal normal_function(mean, sigma);
-	for (auto x = 0; x < width; ++x)
+	for (auto x = 0; x <= width; ++x)
 	{
 		auto x_pdf = pdf(normal_function, x);
 		kernel.push_back(x_pdf);
 		sum += x_pdf;
 	}
 
-	for (auto x = 0; x < width; ++x) { kernel[x] /= sum; }
+	for (auto x = 0; x <= width; ++x) { kernel[x] /= sum; }
 
 	return kernel;
 }

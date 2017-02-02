@@ -36,66 +36,23 @@ void trajectory::analyse_coord_sets(vector<coord_set*> setOfCSInstances) const
 {
 	typedef boost::any anyType;
 
-	auto number_of_data_points = setOfCSInstances[0]->return_num_dp();
+
 	int number_of_coordinate_sets = setOfCSInstances.size();
-	vector<int> startPoints;
-	vector<trajectory_point*> currentTrajP;
-	auto min_element_index = 0;
-	auto min_element_change = true;
+	auto number_of_data_points = setOfCSInstances[0]->return_num_dp();
 
 	vector<string> type_set;
-	cout << setOfCSInstances[0]->return_tP_list().size() << "  ";
 
-	for (auto i = 0; i < number_of_coordinate_sets; ++i)
-	{ //iterate over setOfCSInstances
-		auto tp_loc = setOfCSInstances[i]->return_tP_loc();
-		auto tp_list = setOfCSInstances[i]->return_tP_list();
-		if (tp_loc.size() != 1)
-		{
-			startPoints.push_back(tp_loc[min_element_index + 1]); //initialise startPoints with start point of SECOND section (i.e. where to read the first section up to)
-		}
-		else { startPoints.push_back(number_of_data_points); }
-		currentTrajP.push_back(tp_list[min_element_index]);
-		min_element_change = false;
+	int iTest = 0;
+	for (auto & dataPoint: setOfCSInstances[0]->return_tP_list()[0]->return_traj_coordinate())
+	{
+		iTest++;
 	}
 
-	vector<int> min_vals;
-	min_vals = find_val_loc_by_fn<int>(startPoints, less<int>());
-	auto min_element = min_vals[0];
-	auto min_element_location = min_vals[1];
+	std::cout << iTest << "\t";
 
+	/*
 	for (auto i = 0; i < number_of_data_points; ++i)
 	{
-		if (min_element_change)
-		{
-			while (i == min_element)
-			{ //in case there are multiple identical min elements
-				auto current_min = startPoints[min_element_location]; //establishes current min value for comparison
-				auto working_min = current_min; //initialises working min to a value that will make (working_min <= current_min) true
-				auto iterator = 0;
-
-				while (working_min <= current_min)
-				{ //finds the next minimum value
-					if (iterator == setOfCSInstances[min_element_location]->return_tP_loc().size() - 1)
-					{ //if it has reached the end of the list of minimums, sets the next minimum as the end of the data
-						iterator++;
-						working_min = number_of_data_points;
-						break;
-					}
-					working_min = setOfCSInstances[min_element_location]->return_tP_loc()[iterator + 1]; //update the limit that has been reached with the next limit
-					iterator++; //steps up iterator - this needs to be undone if the while loop ends
-				}
-
-				startPoints[min_element_location] = working_min; //updates the startPoints vector with the found minimum
-				currentTrajP[min_element_location] = setOfCSInstances[min_element_location]->return_tP_list()[iterator - 1]; //update the current trajP for the one that has been maxed
-				min_vals.clear(); //clears previous assignment from find_min_val_loc
-				min_vals = find_val_loc_by_fn<int>(startPoints, less<int>());
-				min_element = min_vals[0];
-				min_element_location = min_vals[1]; //saves new values
-			}
-			min_element_change = false; //min element change has been done
-		}
-
 		if (i < min_element)
 		{
 			vector<anyType> currentTimeCoSets;
@@ -110,35 +67,8 @@ void trajectory::analyse_coord_sets(vector<coord_set*> setOfCSInstances) const
 				type_set.push_back(type);
 			}
 		}
-		if (i == min_element - 1) { min_element_change = true; }
 	}
-}
-
-//compares values by operator - use std::greater, std::less or similar as second argument
-template<typename T> vector<int> trajectory::find_val_loc_by_fn(vector<T> arr, function<bool(T, T)> fn)
-{
-	auto curr_element = *arr.begin();
-	auto curr_element_location = 0;
-	auto index = 0;
-
-	for (auto it = arr.begin(); it != arr.end(); ++it)
-	{
-		auto val = *it;
-		if (fn(val, curr_element))
-		{
-			curr_element = val;
-			curr_element_location = index;
-		}
-
-		index++;
-	}
-
-	vector<int> results;
-
-	results.push_back(curr_element);
-	results.push_back(curr_element_location);
-
-	return results;
+	*/
 }
 
 string trajectory::DetermineTrajType(vector<boost::any> traj_details) const

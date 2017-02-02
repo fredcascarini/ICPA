@@ -47,11 +47,9 @@ int main()
 	string data("file_icp.dat");
 
 	ifstream input(data.c_str());
-	if (!input.is_open())
-	{
-		cout << "Error in opening input file";
-		return 1;
-	}
+
+	//file fails to open: print error message and quit
+	if (!input.is_open())  { cout << "Error in opening input file"; return 1; }
 
 	char_separator<char> sep(" ");
 	typedef tokenizer<char_separator<char>> Tokenizer;
@@ -68,12 +66,12 @@ int main()
 
 	while (getline(input, line))
 	{
-		auto print_on = 50;
+		auto print_on = 100;
 
 		if (tracker % print_on == 0)
 		{
 			duration2 = (clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
-			cout << tracker / print_on << "\t" << duration2 - duration << "\n";
+			cout << tracker / print_on << "\t" << (duration2 - duration) * 1000 << "ms\n";
 			duration = duration2;
 		}
 
@@ -100,7 +98,7 @@ int main()
 		last_traj_no = stod(vec[0]);
 	}
 
-	cout << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC);
+	cout << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC) << "s";
 
 	return 0;
 }

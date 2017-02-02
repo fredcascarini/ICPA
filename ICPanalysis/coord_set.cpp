@@ -26,26 +26,10 @@ coord_set::coord_set(vector<string> dataline, set_of_trajectories* ST) //constru
 
 	switch (num_atoms)
 	{
-	case (2):
-		{
-			type = dataType::length;
-			break;
-		}
-	case (3):
-		{
-			type = dataType::angle;
-			break;
-		}
-	case (4):
-		{
-			type = dataType::dihedral;
-			break;
-		}
-	default:
-		{
-			type = dataType::error;
-			break;
-		}
+	case (2):	{ type = dataType::length; break; }
+	case (3):	{ type = dataType::angle; break; }
+	case (4):	{ type = dataType::dihedral; break; }
+	default:	{ type = dataType::error; break; }
 	}
 }
 
@@ -84,7 +68,7 @@ void coord_set::CreateTrajPoints(vector<string> Data, set_of_trajectories* ST)
 	auto start = num_header_cols;
 
 	//use linreg to find first (approach) section 
-	auto EndSlopeIntercept = get_linear_fit(dData, 0.95, 1.0, start);
+	auto EndSlopeIntercept = get_linear_fit(dData, 0.90, 5.0, start);
 	unsigned int ESIend = static_cast<int>(round(EndSlopeIntercept[0]));
 	auto end = (start + ESIend < dData.size()) ? (start + ESIend) : dData.size();
 
