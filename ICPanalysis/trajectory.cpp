@@ -42,14 +42,6 @@ void trajectory::analyse_coord_sets(vector<coord_set*> setOfCSInstances) const
 
 	vector<string> type_set;
 
-	int iTest = 0;
-	for (auto & dataPoint: setOfCSInstances[0]->return_tP_list()[0]->return_traj_coordinate())
-	{
-		iTest++;
-	}
-
-	std::cout << iTest << "\t";
-
 	/*
 	for (auto i = 0; i < number_of_data_points; ++i)
 	{
